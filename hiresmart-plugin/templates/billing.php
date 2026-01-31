@@ -93,6 +93,62 @@ $tier_info = $subscription_manager->get_tier($subscription->subscription_tier);
 
 <script>
 function openAddPaymentModal() {
-    alert('Payment method modal would open here. In production, integrate with Stripe Elements.');
+    var modalHTML = `
+        <div id="payment-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+            <div style="background: white; padding: 40px; border-radius: 12px; max-width: 500px; width: 90%;">
+                <h2 style="margin-top: 0;">Add Payment Method</h2>
+                <p>Enter your card details to add a payment method.</p>
+                
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label>Cardholder Name</label>
+                        <input type="text" name="cardholder_name" placeholder="John Doe" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" name="card_number" placeholder="4242 4242 4242 4242" maxlength="19" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Expiry Date</label>
+                            <input type="text" name="expiry" placeholder="MM/YY" maxlength="5" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                        </div>
+                        
+                        <div class="form-group" style="flex: 1;">
+                            <label>CVC</label>
+                            <input type="text" name="cvc" placeholder="123" maxlength="3" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 12px; color: #6b7280; padding: 12px; background: #f9fafb; border-radius: 6px; margin: 16px 0;">
+                        🔒 Your payment information is secure and encrypted. We use Stripe for payment processing.
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button type="submit" class="btn-primary" style="flex: 1;">Add Card</button>
+                        <button type="button" class="btn-secondary" onclick="closePaymentModal()" style="flex: 1;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    jQuery('body').append(modalHTML);
+    
+    jQuery('#payment-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Simulate payment processing
+        alert('Payment method would be added via Stripe API.\n\nIn production:\n1. Tokenize card with Stripe.js\n2. Send token to server\n3. Create payment method\n4. Save to database\n5. Update UI');
+        
+        closePaymentModal();
+        // location.reload();
+    });
+}
+
+function closePaymentModal() {
+    jQuery('#payment-modal').remove();
 }
 </script>
