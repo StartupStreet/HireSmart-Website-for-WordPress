@@ -25,6 +25,9 @@
                     <li><a href="<?php echo home_url(); ?>#pricing">Pricing</a></li>
                     <?php if (is_user_logged_in()): ?>
                         <li><a href="<?php echo site_url('/dashboard'); ?>">Dashboard</a></li>
+                        <li><a href="<?php echo site_url('/profile'); ?>">Profile</a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo site_url('/login'); ?>">Sign In</a></li>
                     <?php endif; ?>
                 </ul>
             </nav>

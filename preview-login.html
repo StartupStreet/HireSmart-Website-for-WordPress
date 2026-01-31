@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign In - HireSmart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="hiresmart-plugin/assets/css/hiresmart.css">
+    <style>
+        body {
+            background-color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <div class="header-content">
+            <a href="preview.html" class="logo">
+                Hire<span>Smart</span>
+            </a>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="preview.html#features">Features</a></li>
+                    <li><a href="preview.html#pricing">Pricing</a></li>
+                    <li><a href="preview-login.html">Sign In</a></li>
+                </ul>
+            </nav>
+            
+            <a href="preview-register.html" class="cta-button">Get Started</a>
+        </div>
+    </div>
+</header>
+
+<div class="hiresmart-login-container">
+    <div class="hiresmart-login-form">
+        <h2>Sign In to HireSmart</h2>
+        
+        <form id="hiresmart-login-form" method="post" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-row">
+                <label>
+                    <input type="checkbox" name="remember" value="1">
+                    Remember me
+                </label>
+                
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="btn-primary btn-large">Sign In</button>
+            
+            <div class="form-divider">
+                <span>OR</span>
+            </div>
+            
+            <div class="social-login-buttons">
+                <button type="button" class="btn-social btn-google" onclick="handleSocialLogin('Google')">
+                    Continue with Google
+                </button>
+                <button type="button" class="btn-social btn-linkedin" onclick="handleSocialLogin('LinkedIn')">
+                    Continue with LinkedIn
+                </button>
+                <button type="button" class="btn-social btn-github" onclick="handleSocialLogin('GitHub')">
+                    Continue with GitHub
+                </button>
+            </div>
+        </form>
+        
+        <p class="form-footer">
+            Don't have an account? <a href="preview-register.html">Create Account</a>
+        </p>
+    </div>
+</div>
+
+<footer style="background: #1f2937; color: white; padding: 40px 0; text-align: center; margin-top: 60px;">
+    <div class="container">
+        <p>&copy; 2026 HireSmart. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    // Simulate login
+    console.log('Login data:', data);
+    
+    // Show success message
+    alert(`Login successful!\n\nEmail: ${data.email}\n\nRedirecting to dashboard...`);
+    
+    // Redirect to dashboard
+    window.location.href = 'preview-dashboard.html';
+    
+    return false;
+}
+
+function handleSocialLogin(provider) {
+    alert(`Initiating ${provider} OAuth login...\n\nIn production, this would:\n1. Open ${provider} OAuth popup\n2. Authenticate user\n3. Redirect to dashboard`);
+    
+    // Simulate successful login
+    setTimeout(() => {
+        window.location.href = 'preview-dashboard.html';
+    }, 1000);
+}
+</script>
+
+</body>
+</html>

@@ -19,8 +19,13 @@ get_header(); ?>
                 Save time, make smarter hiring decisions, and accelerate your career growth.
             </p>
             <div class="hero-buttons">
-                <a href="#features" class="btn-primary">Explore Features</a>
-                <a href="#pricing" class="btn-secondary">View Pricing</a>
+                <?php if (is_user_logged_in()): ?>
+                    <a href="<?php echo site_url('/dashboard'); ?>" class="btn-primary">Go to Dashboard</a>
+                    <a href="<?php echo site_url('/profile'); ?>" class="btn-secondary">View Profile</a>
+                <?php else: ?>
+                    <a href="<?php echo site_url('/register'); ?>" class="btn-primary">Get Started Free</a>
+                    <a href="<?php echo site_url('/login'); ?>" class="btn-secondary">Sign In</a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

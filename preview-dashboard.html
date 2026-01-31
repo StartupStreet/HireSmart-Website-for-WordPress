@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - HireSmart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="hiresmart-plugin/assets/css/hiresmart.css">
+    <link rel="stylesheet" href="hiresmart-plugin/assets/css/dashboard.css">
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .dashboard-navigation {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-nav-links {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .dashboard-nav-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .dashboard-nav-links a:hover,
+        .dashboard-nav-links a.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        
+        .account-type-switcher {
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .account-type-switcher button {
+            padding: 10px 20px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .account-type-switcher button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <div class="header-content">
+            <a href="preview.html" class="logo">
+                Hire<span>Smart</span>
+            </a>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="preview-dashboard.html">Dashboard</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#billing">Billing</a></li>
+                    <li><a href="#integrations">Integrations</a></li>
+                </ul>
+            </nav>
+            
+            <a href="preview.html" class="cta-button">Logout</a>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-navigation">
+    <div class="dashboard-nav-links">
+        <a href="#" class="active">Dashboard</a>
+        <a href="#profile">Profile & AI Scores</a>
+        <a href="#billing">Billing & Subscription</a>
+        <a href="#integrations">Integrations</a>
+        <a href="#settings">Settings</a>
+    </div>
+</div>
+
+<div class="account-type-switcher">
+    <button class="active" onclick="showDashboard('job_seeker')">Job Seeker View</button>
+    <button onclick="showDashboard('employer')">Employer View</button>
+    <button onclick="showDashboard('agency')">Agency View</button>
+</div>
+
+<!-- Job Seeker Dashboard -->
+<div id="dashboard-job_seeker" class="hiresmart-dashboard job-seeker-dashboard">
+    <h1>Job Seeker Dashboard</h1>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Applications Sent</h3>
+            <div class="stat-value">15</div>
+        </div>
+        <div class="stat-card">
+            <h3>Profile Views</h3>
+            <div class="stat-value">127</div>
+        </div>
+        <div class="stat-card">
+            <h3>Interviews</h3>
+            <div class="stat-value">3</div>
+        </div>
+        <div class="stat-card">
+            <h3>Matches Found</h3>
+            <div class="stat-value">24</div>
+        </div>
+    </div>
+    
+    <div class="dashboard-section">
+        <h2>Recent Activity</h2>
+        <div class="activity-list">
+            <div class="activity-item">
+                <span class="activity-type">Application</span>
+                <span class="activity-title">Applied to Senior Developer at TechCorp</span>
+                <span class="activity-time">2 hours ago</span>
+            </div>
+            <div class="activity-item">
+                <span class="activity-type">Match</span>
+                <span class="activity-title">New job match: Full Stack Engineer</span>
+                <span class="activity-time">5 hours ago</span>
+            </div>
+            <div class="activity-item">
+                <span class="activity-type">View</span>
+                <span class="activity-title">Your profile was viewed by StartupInc</span>
+                <span class="activity-time">1 day ago</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-section">
+        <h2>AI Profile Insights</h2>
+        <div class="ai-scores">
+            <div class="score-card">
+                <h4>IQ Score</h4>
+                <div class="score-value">128</div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width: 85%"></div>
+                </div>
+            </div>
+            <div class="score-card">
+                <h4>EQ Score</h4>
+                <div class="score-value">82</div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width: 82%"></div>
+                </div>
+            </div>
+            <div class="score-card">
+                <h4>SQ Score</h4>
+                <div class="score-value">75</div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width: 75%"></div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-primary" onclick="handleAIAssessment()">Take AI Assessment</button>
+    </div>
+</div>
+
+<!-- Employer Dashboard -->
+<div id="dashboard-employer" class="hiresmart-dashboard employer-dashboard" style="display: none;">
+    <h1>Employer Dashboard</h1>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Active Jobs</h3>
+            <div class="stat-value">6</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Applicants</h3>
+            <div class="stat-value">187</div>
+        </div>
+        <div class="stat-card">
+            <h3>Interviews</h3>
+            <div class="stat-value">12</div>
+        </div>
+        <div class="stat-card">
+            <h3>Positions Filled</h3>
+            <div class="stat-value">4</div>
+        </div>
+    </div>
+    
+    <div class="dashboard-section">
+        <h2>Recent Activity</h2>
+        <div class="activity-list">
+            <div class="activity-item">
+                <span class="activity-type">Applicant</span>
+                <span class="activity-title">New applicant for Software Engineer position</span>
+                <span class="activity-time">1 hour ago</span>
+            </div>
+            <div class="activity-item">
+                <span class="activity-type">Interview</span>
+                <span class="activity-title">Interview scheduled with John Doe</span>
+                <span class="activity-time">3 hours ago</span>
+            </div>
+            <div class="activity-item">
+                <span class="activity-type">Posting</span>
+                <span class="activity-title">Job posting "Senior Designer" went live</span>
+                <span class="activity-time">1 day ago</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-actions">
+        <button class="btn-primary" onclick="alert('Post New Job feature coming soon!')">Post New Job</button>
+        <button class="btn-secondary" onclick="alert('View Applicants feature coming soon!')">View Applicants</button>
+    </div>
+</div>
+
+<!-- Agency Dashboard -->
+<div id="dashboard-agency" class="hiresmart-dashboard agency-dashboard" style="display: none;">
+    <h1>Agency Dashboard</h1>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Active Clients</h3>
+            <div class="stat-value">8</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Placements</h3>
+            <div class="stat-value">32</div>
+        </div>
+        <div class="stat-card">
+            <h3>Candidates</h3>
+            <div class="stat-value">245</div>
+        </div>
+        <div class="stat-card">
+            <h3>Revenue</h3>
+            <div class="stat-value">$45,890</div>
+        </div>
+    </div>
+    
+    <div class="dashboard-section">
+        <h2>Recent Activity</h2>
+        <div class="activity-list">
+            <div class="activity-item">
+                <span class="activity-type">Placement</span>
+                <span class="activity-title">Candidate placed at Client ABC</span>
+                <span class="activity-time">2 hours ago</span>
+            </div>
+            <div class="activity-item">
+                <span class="activity-type">Client</span>
+                <span class="activity-title">New client inquiry received</span>
+                <span class="activity-time">4 hours ago</span>
+            </div>
+            <div class="activity-item">
+                <span class="activity-type">Candidate</span>
+                <span class="activity-title">5 new candidates added to talent pool</span>
+                <span class="activity-time">1 day ago</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-actions">
+        <button class="btn-primary" onclick="alert('Add Client feature coming soon!')">Add Client</button>
+        <button class="btn-secondary" onclick="alert('Manage Candidates feature coming soon!')">Manage Candidates</button>
+    </div>
+</div>
+
+<footer style="background: #1f2937; color: white; padding: 40px 0; text-align: center; margin-top: 60px;">
+    <div class="container">
+        <p>&copy; 2026 HireSmart. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+function showDashboard(type) {
+    // Hide all dashboards
+    document.querySelectorAll('[id^="dashboard-"]').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Show selected dashboard
+    document.getElementById('dashboard-' + type).style.display = 'block';
+    
+    // Update active button
+    document.querySelectorAll('.account-type-switcher button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+}
+
+function handleAIAssessment() {
+    if (confirm('Start AI Assessment?\n\nThis will assess your IQ, EQ, and SQ through a series of questions.\n\nThe assessment takes about 10-15 minutes.')) {
+        alert('AI Assessment Module\n\nQuestions would cover:\n- Logical Reasoning (IQ)\n- Problem Solving (IQ)\n- Emotional Awareness (EQ)\n- Empathy (EQ)\n- Communication Skills (SQ)\n- Teamwork Ability (SQ)\n\nScores are calculated and stored automatically.');
+    }
+}
+</script>
+
+</body>
+</html>
