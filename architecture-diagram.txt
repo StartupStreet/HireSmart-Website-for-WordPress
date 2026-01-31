@@ -1,0 +1,140 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                     HireSmart Two-Domain Architecture                          ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+                              ┌─────────────────┐
+                              │   DNS Server    │
+                              │  startupstreet  │
+                              └────────┬────────┘
+                                       │
+                ┌──────────────────────┴──────────────────────┐
+                │                                              │
+    ┌───────────▼──────────┐                      ┌───────────▼──────────┐
+    │  hiresmart.           │                      │  app-hiresmart.      │
+    │  startupstreet.in     │                      │  startupstreet.in    │
+    │                       │                      │                      │
+    │  Landing Page         │                      │  Dashboard App       │
+    └───────────┬───────────┘                      └───────────┬──────────┘
+                │                                              │
+    ┌───────────▼───────────┐                      ┌───────────▼──────────┐
+    │  WordPress Install    │                      │  WordPress Install   │
+    │  ┌─────────────────┐  │                      │  ┌────────────────┐  │
+    │  │ HireSmart Theme │  │                      │  │ HireSmart      │  │
+    │  │ (Landing Page)  │  │                      │  │ Plugin         │  │
+    │  └─────────────────┘  │                      │  │ (Full App)     │  │
+    │  ┌─────────────────┐  │                      │  └────────────────┘  │
+    │  │ HireSmart Plugin│  │                      │                      │
+    │  │ (Auth Only)     │  │                      │  Creates Pages:      │
+    │  └─────────────────┘  │                      │  • Dashboard         │
+    └───────────┬───────────┘                      │  • Profile           │
+                │                                   │  • Billing           │
+                │                                   │  • Integrations      │
+                │                                   │  • Login/Register    │
+                │                                   └───────────┬──────────┘
+                │                                              │
+                └──────────────────┬───────────────────────────┘
+                                   │
+                         ┌─────────▼─────────┐
+                         │  Shared Database  │
+                         │                   │
+                         │  Tables:          │
+                         │  • wp_users       │
+                         │  • wp_hiresmart_* │
+                         └───────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                            User Flow Diagram                                    ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  1. User visits: hiresmart.startupstreet.in                                │
+│     ┌────────────────────────────────────┐                                 │
+│     │  Landing Page                      │                                 │
+│     │  • Hero Section                    │                                 │
+│     │  • Features                        │                                 │
+│     │  • Use Cases                       │                                 │
+│     │  • Pricing                         │                                 │
+│     │  • [Get Started] button            │                                 │
+│     └─────────────┬──────────────────────┘                                 │
+│                   │ Click "Get Started"                                    │
+│                   ▼                                                        │
+│  2. Redirects to: app-hiresmart.startupstreet.in/register                 │
+│     ┌────────────────────────────────────┐                                 │
+│     │  Registration Form                 │                                 │
+│     │  • Name, Email, Password           │                                 │
+│     │  • Account Type Selection          │                                 │
+│     │  • Subscription Tier Selection     │                                 │
+│     │  • Submit →                        │                                 │
+│     └─────────────┬──────────────────────┘                                 │
+│                   │                                                        │
+│                   ├─ Free Plan → Dashboard                                │
+│                   └─ Paid Plan → Billing Page → Dashboard                 │
+│                                   ▼                                        │
+│  3. User Dashboard: app-hiresmart.startupstreet.in/dashboard              │
+│     ┌────────────────────────────────────┐                                 │
+│     │  Role-Based Dashboard              │                                 │
+│     │  • Job Seeker Dashboard            │                                 │
+│     │  • Employer Dashboard              │                                 │
+│     │  • Agency Dashboard                │                                 │
+│     │  (Based on account type)           │                                 │
+│     └────────────────────────────────────┘                                 │
+│                                                                             │
+│  4. Navigation Links:                                                      │
+│     • Profile    → app-hiresmart.startupstreet.in/profile                 │
+│     • Billing    → app-hiresmart.startupstreet.in/billing                 │
+│     • Integration→ app-hiresmart.startupstreet.in/integrations            │
+│     • Logout     → Back to hiresmart.startupstreet.in                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                     Session Sharing Configuration                               ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+  Both domains use shared cookies via wp-config.php:
+  
+  ┌────────────────────────────────────────────────────────┐
+  │  define('COOKIE_DOMAIN', '.startupstreet.in');        │  ← Note the dot!
+  │  define('AUTH_KEY', 'same-key-on-both-domains');      │
+  │  define('SECURE_AUTH_KEY', 'same-key');               │
+  │  ... (all 8 keys must match)                          │
+  └────────────────────────────────────────────────────────┘
+  
+  Result: User logged in on app-hiresmart stays logged in on hiresmart
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                           Quick Preview Options                                 ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+  Option 1: Instant HTML Preview (0 minutes)
+  ┌────────────────────────────────────┐
+  │  Open preview.html in browser      │  → See landing page instantly
+  └────────────────────────────────────┘
+
+  Option 2: Local Web Server (2 minutes)
+  ┌────────────────────────────────────┐
+  │  python3 -m http.server 8000       │  → Better URL structure
+  │  Open: localhost:8000/preview.html │
+  └────────────────────────────────────┘
+
+  Option 3: Full WordPress (30-60 minutes)
+  ┌────────────────────────────────────┐
+  │  Install Local by Flywheel         │  → Test complete application
+  │  Install theme + plugin            │  → With authentication & dashboards
+  └────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                        Deployment Time Estimate                                 ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+  DNS Setup:              5 minutes
+  WordPress Installation: 15 minutes
+  File Deployment:        10 minutes
+  SSL Configuration:      10 minutes
+  Testing:                10 minutes
+  ────────────────────────────────
+  Total:                  50 minutes
+
+  First-time setup may take 1-2 hours including reading documentation.
+
