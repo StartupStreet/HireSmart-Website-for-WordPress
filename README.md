@@ -1,5 +1,18 @@
 # HireSmart - AI-Powered Job Portal
 
+## 🚀 Quick Start
+
+**Want to preview or deploy?**
+- 📖 [QUICKSTART.md](./QUICKSTART.md) - Fast preview & deployment steps
+- 🧪 [PREVIEW_GUIDE.md](./PREVIEW_GUIDE.md) - Local testing instructions
+- 🌐 [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Production deployment for two-domain setup
+
+**Deploy to:**
+- Landing page: `hiresmart.startupstreet.in`
+- Dashboard app: `app-hiresmart.startupstreet.in`
+
+---
+
 ## Project Overview
 
 HireSmart is a comprehensive AI-powered job portal and career builder with an advanced Applicant Tracking System (ATS). The platform connects job seekers, employers, and recruitment agencies through intelligent neural AI technology.
