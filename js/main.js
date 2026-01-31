@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add sticky header effect on scroll
     const header = document.querySelector('.site-header');
-    let lastScrollTop = 0;
     
     window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -100,8 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             header.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
         }
-        
-        lastScrollTop = scrollTop;
     });
     
     // Mobile menu toggle (if needed in future)
