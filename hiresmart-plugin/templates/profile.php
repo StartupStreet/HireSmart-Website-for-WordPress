@@ -116,42 +116,42 @@ function openAIAssessment() {
                     <div class="form-group">
                         <label><strong>Logical Reasoning (1-10)</strong></label>
                         <p style="font-size: 14px; color: #6b7280;">How would you rate your logical problem-solving abilities?</p>
-                        <input type="range" name="logical_reasoning" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <input type="range" name="logical_reasoning" min="1" max="10" value="5" aria-label="Logical Reasoning Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
                         <span>5</span>
                     </div>
                     
                     <div class="form-group">
                         <label><strong>Problem Solving (1-10)</strong></label>
                         <p style="font-size: 14px; color: #6b7280;">How effective are you at finding solutions to complex problems?</p>
-                        <input type="range" name="problem_solving" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <input type="range" name="problem_solving" min="1" max="10" value="5" aria-label="Problem Solving Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
                         <span>5</span>
                     </div>
                     
                     <div class="form-group">
                         <label><strong>Emotional Awareness (1-10)</strong></label>
                         <p style="font-size: 14px; color: #6b7280;">How well do you understand and manage your own emotions?</p>
-                        <input type="range" name="emotional_awareness" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <input type="range" name="emotional_awareness" min="1" max="10" value="5" aria-label="Emotional Awareness Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
                         <span>5</span>
                     </div>
                     
                     <div class="form-group">
                         <label><strong>Empathy (1-10)</strong></label>
                         <p style="font-size: 14px; color: #6b7280;">How well do you understand and relate to others' feelings?</p>
-                        <input type="range" name="empathy" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <input type="range" name="empathy" min="1" max="10" value="5" aria-label="Empathy Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
                         <span>5</span>
                     </div>
                     
                     <div class="form-group">
                         <label><strong>Communication Skills (1-10)</strong></label>
                         <p style="font-size: 14px; color: #6b7280;">How effective are you at communicating with others?</p>
-                        <input type="range" name="communication" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <input type="range" name="communication" min="1" max="10" value="5" aria-label="Communication Skills Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
                         <span>5</span>
                     </div>
                     
                     <div class="form-group">
                         <label><strong>Teamwork Ability (1-10)</strong></label>
                         <p style="font-size: 14px; color: #6b7280;">How well do you work in team environments?</p>
-                        <input type="range" name="teamwork" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <input type="range" name="teamwork" min="1" max="10" value="5" aria-label="Teamwork Ability Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
                         <span>5</span>
                     </div>
                     

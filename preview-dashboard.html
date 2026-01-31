@@ -288,7 +288,7 @@
 </footer>
 
 <script>
-function showDashboard(type) {
+function showDashboard(type, event) {
     // Hide all dashboards
     document.querySelectorAll('[id^="dashboard-"]').forEach(el => {
         el.style.display = 'none';
@@ -301,7 +301,9 @@ function showDashboard(type) {
     document.querySelectorAll('.account-type-switcher button').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
 }
 
 function handleAIAssessment() {

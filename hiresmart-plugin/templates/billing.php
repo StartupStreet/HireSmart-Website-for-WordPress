@@ -97,7 +97,10 @@ function openAddPaymentModal() {
         <div id="payment-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
             <div style="background: white; padding: 40px; border-radius: 12px; max-width: 500px; width: 90%;">
                 <h2 style="margin-top: 0;">Add Payment Method</h2>
-                <p>Enter your card details to add a payment method.</p>
+                <p style="color: #dc2626; background: #fef2f2; padding: 12px; border-radius: 6px; margin-bottom: 16px; font-size: 14px;">
+                    ⚠️ <strong>Demo UI Only:</strong> This form is for demonstration purposes. In production, use Stripe Elements for PCI-compliant payment collection.
+                </p>
+                <p>This UI demonstrates the payment collection flow. Production implementation requires Stripe.js integration.</p>
                 
                 <form id="payment-form">
                     <div class="form-group">
@@ -106,28 +109,36 @@ function openAddPaymentModal() {
                     </div>
                     
                     <div class="form-group">
-                        <label>Card Number</label>
-                        <input type="text" name="card_number" placeholder="4242 4242 4242 4242" maxlength="19" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                        <label>Card Number (Demo - Not Collected)</label>
+                        <input type="text" name="card_number" placeholder="Use Stripe Elements in production" disabled style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: #f9fafb;">
+                        <small style="color: #6b7280; font-size: 12px;">Production: Stripe Elements iframe handles card input</small>
                     </div>
                     
                     <div style="display: flex; gap: 12px;">
                         <div class="form-group" style="flex: 1;">
                             <label>Expiry Date</label>
-                            <input type="text" name="expiry" placeholder="MM/YY" maxlength="5" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                            <input type="text" placeholder="MM/YY" disabled style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: #f9fafb;">
                         </div>
                         
                         <div class="form-group" style="flex: 1;">
                             <label>CVC</label>
-                            <input type="text" name="cvc" placeholder="123" maxlength="3" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                            <input type="text" placeholder="123" disabled style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: #f9fafb;">
                         </div>
                     </div>
                     
-                    <div style="font-size: 12px; color: #6b7280; padding: 12px; background: #f9fafb; border-radius: 6px; margin: 16px 0;">
-                        🔒 Your payment information is secure and encrypted. We use Stripe for payment processing.
+                    <div style="font-size: 12px; color: #1f2937; padding: 12px; background: #dbeafe; border-radius: 6px; margin: 16px 0; border-left: 4px solid #2563eb;">
+                        <strong>Production Implementation:</strong><br>
+                        1. Load Stripe.js library<br>
+                        2. Create Stripe Elements for card input<br>
+                        3. Tokenize card on client side<br>
+                        4. Send token (not card data) to server<br>
+                        5. Create PaymentMethod via Stripe API<br>
+                        6. Store payment method ID only<br><br>
+                        Card data never touches your server (PCI DSS compliant).
                     </div>
                     
                     <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button type="submit" class="btn-primary" style="flex: 1;">Add Card</button>
+                        <button type="submit" class="btn-primary" style="flex: 1;">Simulate Add Card</button>
                         <button type="button" class="btn-secondary" onclick="closePaymentModal()" style="flex: 1;">Cancel</button>
                     </div>
                 </form>
@@ -141,7 +152,7 @@ function openAddPaymentModal() {
         e.preventDefault();
         
         // Simulate payment processing
-        alert('Payment method would be added via Stripe API.\n\nIn production:\n1. Tokenize card with Stripe.js\n2. Send token to server\n3. Create payment method\n4. Save to database\n5. Update UI');
+        alert('✅ Demo Mode\n\nPayment method UI demonstrated.\n\nProduction Flow:\n1. Tokenize with Stripe Elements\n2. Send token to server\n3. Create Stripe PaymentMethod\n4. Attach to customer\n5. Save payment method ID\n6. Update UI\n\nSee IMPLEMENTATION_GUIDE.md for Stripe setup.');
         
         closePaymentModal();
         // location.reload();

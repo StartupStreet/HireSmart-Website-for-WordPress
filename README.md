@@ -4,12 +4,39 @@
 
 **Want to preview or deploy?**
 - 📖 [QUICKSTART.md](./QUICKSTART.md) - Fast preview & deployment steps
-- 🧪 [PREVIEW_GUIDE.md](./PREVIEW_GUIDE.md) - Local testing instructions
+- 🧪 [TESTING_GUIDE.md](./TESTING_GUIDE.md) - **NEW: Comprehensive testing guide**
 - 🌐 [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Production deployment for two-domain setup
+- 📄 [PREVIEW_GUIDE.md](./PREVIEW_GUIDE.md) - Local testing instructions
+
+**Preview Pages (No Server Required):**
+- [preview.html](./preview.html) - Landing page preview
+- [preview-register.html](./preview-register.html) - **NEW: Registration page**
+- [preview-login.html](./preview-login.html) - **NEW: Login page**
+- [preview-dashboard.html](./preview-dashboard.html) - **NEW: Interactive dashboard**
 
 **Deploy to:**
 - Landing page: `hiresmart.startupstreet.in`
 - Dashboard app: `app-hiresmart.startupstreet.in`
+
+---
+
+## ✨ New in This Release
+
+### Enhanced User Experience
+- ✅ **Improved Navigation** - Sign In link added to header menu
+- ✅ **Interactive Modals** - AI Assessment and Payment forms in elegant modals
+- ✅ **Loading States** - Professional loading overlays for all AJAX operations
+- ✅ **Toast Notifications** - Real-time feedback for user actions
+- ✅ **Form Validation** - Inline error messages with visual feedback
+- ✅ **Responsive Design** - Optimized for mobile, tablet, and desktop
+
+### Production-Ready Features
+- ✅ **Complete Registration Flow** - Account type, subscription selection, payment redirect
+- ✅ **Social Login UI** - Buttons for Google, LinkedIn, GitHub (OAuth integration ready)
+- ✅ **AI Assessment Tool** - Interactive modal with 6-question assessment
+- ✅ **Payment Collection** - Modal for adding credit cards (Stripe integration ready)
+- ✅ **Profile Management** - Complete profile editing with AI scores
+- ✅ **Integration Hub** - Connect LinkedIn, GitHub, Behance, Canva, portfolio
 
 ---
 
