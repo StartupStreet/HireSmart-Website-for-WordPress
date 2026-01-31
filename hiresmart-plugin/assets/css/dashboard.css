@@ -1,0 +1,81 @@
+/**
+ * Dashboard-specific styles
+ */
+
+.dashboard-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.dashboard-actions button {
+    flex: 1;
+}
+
+.hiresmart-profile-container,
+.hiresmart-billing-container,
+.hiresmart-integrations-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.profile-section,
+.billing-section,
+.integration-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.profile-section h2,
+.billing-section h2,
+.integration-section h2 {
+    margin: 0 0 24px 0;
+    color: #1f2937;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 12px;
+}
+
+.score-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.section-description {
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #2563eb;
+    cursor: pointer;
+    padding: 4px 8px;
+    text-decoration: underline;
+}
+
+.btn-link:hover {
+    color: #1e40af;
+}
+
+.text-danger {
+    color: #dc2626;
+}
+
+.notice {
+    padding: 16px;
+    background: #dbeafe;
+    border-left: 4px solid #2563eb;
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.notice p {
+    margin: 0;
+    color: #1e40af;
+}

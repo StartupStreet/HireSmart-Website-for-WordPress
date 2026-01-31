@@ -19,14 +19,21 @@
             
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#use-cases">Use Cases</a></li>
-                    <li><a href="#differentiators">Why Us</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="<?php echo home_url(); ?>#features">Features</a></li>
+                    <li><a href="<?php echo home_url(); ?>#use-cases">Use Cases</a></li>
+                    <li><a href="<?php echo home_url(); ?>#differentiators">Why Us</a></li>
+                    <li><a href="<?php echo home_url(); ?>#pricing">Pricing</a></li>
+                    <?php if (is_user_logged_in()): ?>
+                        <li><a href="<?php echo site_url('/dashboard'); ?>">Dashboard</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
             
-            <a href="#" class="cta-button">Get Started</a>
+            <?php if (is_user_logged_in()): ?>
+                <a href="<?php echo wp_logout_url(home_url()); ?>" class="cta-button">Logout</a>
+            <?php else: ?>
+                <a href="<?php echo site_url('/register'); ?>" class="cta-button">Get Started</a>
+            <?php endif; ?>
         </div>
     </div>
 </header>
