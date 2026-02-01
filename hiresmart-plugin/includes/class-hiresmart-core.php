@@ -27,6 +27,9 @@ class HireSmart_Core {
         // Enqueue scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
         
+        // Handle redirects before headers are sent
+        add_action('template_redirect', array($this, 'handle_redirects'));
+        
         // AJAX actions
         add_action('wp_ajax_hiresmart_register', array($this, 'ajax_register'));
         add_action('wp_ajax_nopriv_hiresmart_register', array($this, 'ajax_register'));
@@ -58,6 +61,16 @@ class HireSmart_Core {
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('hiresmart_nonce')
         ));
+    }
+    
+    public function handle_redirects() {
+        // Check if user is logged in and trying to access login or register pages
+        if (is_user_logged_in()) {
+            if (is_page('login') || is_page('register')) {
+                wp_redirect(site_url('/dashboard'));
+                exit;
+            }
+        }
     }
     
     public function render_dashboard() {
@@ -101,22 +114,14 @@ class HireSmart_Core {
     }
     
     public function render_login() {
-        if (is_user_logged_in()) {
-            wp_redirect(site_url('/dashboard'));
-            exit;
-        }
-        
+        // Redirect is handled in handle_redirects() hook
         ob_start();
         include HIRESMART_PLUGIN_DIR . 'templates/login.php';
         return ob_get_clean();
     }
     
     public function render_register() {
-        if (is_user_logged_in()) {
-            wp_redirect(site_url('/dashboard'));
-            exit;
-        }
-        
+        // Redirect is handled in handle_redirects() hook
         ob_start();
         include HIRESMART_PLUGIN_DIR . 'templates/register.php';
         return ob_get_clean();
