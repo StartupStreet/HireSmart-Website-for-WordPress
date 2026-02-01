@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireSmart - Job Detail Modal Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 40px;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .job-card h3 {
+            font-size: 22px;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .company-name {
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .agency-badge {
+            background: #fbbf24;
+            color: white;
+        }
+        
+        .btn-view-job {
+            padding: 8px 16px;
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-view-job:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        /* Job Modal Styles */
+        .job-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .job-modal.show {
+            display: block;
+            opacity: 1;
+        }
+        
+        .job-modal-content {
+            background-color: white;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: modalSlideDown 0.3s ease;
+        }
+        
+        @keyframes modalSlideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #6b7280;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 1;
+        }
+        
+        .modal-close:hover {
+            color: #1f2937;
+        }
+        
+        .modal-header {
+            padding: 30px;
+            border-bottom: 2px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 20px;
+            position: relative;
+        }
+        
+        .modal-header h2 {
+            font-size: 28px;
+            color: #1f2937;
+            margin: 0 0 10px 0;
+        }
+        
+        .modal-company {
+            font-size: 16px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .modal-company:hover {
+            color: #2563eb;
+        }
+        
+        .btn-view-profile {
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: background 0.3s;
+        }
+        
+        .btn-view-profile:hover {
+            background: #1e40af;
+        }
+        
+        .modal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 20px 30px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .meta-item {
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .modal-salary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .job-detail-section {
+            margin-bottom: 30px;
+        }
+        
+        .job-detail-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .job-detail-section h3 {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .job-detail-section h3 i {
+            color: #2563eb;
+        }
+        
+        .job-detail-content {
+            color: #4b5563;
+            line-height: 1.8;
+        }
+        
+        .job-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .skill-tag {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .employer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            color: #2563eb;
+            font-size: 18px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .job-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 2px solid #f3f4f6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: #f9fafb;
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .btn-secondary {
+            padding: 12px 24px;
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-apply {
+            padding: 12px 24px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-apply:hover {
+            background: #1e40af;
+        }
+        
+        .job-expiry {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .job-expiry.expiry-normal {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .job-expiry.expiry-urgent {
+            background: #fee2e2;
+            color: #dc2626;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .commission-badge, .referral-badge {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .job-modal-content {
+                width: 95%;
+                margin: 5% auto;
+                max-height: 90vh;
+            }
+            
+            .modal-header {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .modal-header h2 {
+                font-size: 22px;
+            }
+            
+            .modal-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .btn-view-profile,
+            .modal-footer button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-briefcase"></i> Job Detail Modal Preview</h1>
+        
+        <p style="text-align: center; color: #6b7280; margin-bottom: 30px;">
+            Click on a job card to see the detailed modal popup with employer information
+        </p>
+        
+        <div class="job-card" onclick="showJobModal('with-commission')">
+            <h3>Senior Full-Stack Developer</h3>
+            <p class="company-name">
+                <i class="fas fa-building"></i> TechCorp Solutions
+                <span class="badge agency-badge">Agency</span>
+            </p>
+            <button class="btn-view-job">
+                <i class="fas fa-info-circle"></i> View Details
+            </button>
+        </div>
+        
+        <div class="job-card" onclick="showJobModal('simple')">
+            <h3>Marketing Manager</h3>
+            <p class="company-name">
+                <i class="fas fa-building"></i> StartupCo Inc
+            </p>
+            <button class="btn-view-job">
+                <i class="fas fa-info-circle"></i> View Details
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function showJobModal(type) {
+            const jobData = {
+                'with-commission': {
+                    title: 'Senior Full-Stack Developer',
+                    employer_name: 'TechCorp Solutions',
+                    account_type: 'agency',
+                    location: 'San Francisco, CA (Hybrid)',
+                    job_type: 'Full-time',
+                    experience_level: 'Senior Level',
+                    salary_min: 120000,
+                    salary_max: 180000,
+                    description: `
+                        <p>We are seeking an experienced Senior Full-Stack Developer to join our dynamic team. You'll be working on cutting-edge web applications using modern technologies.</p>
+                        <p><strong>Responsibilities:</strong></p>
+                        <ul>
+                            <li>Design and develop scalable web applications</li>
+                            <li>Lead technical architecture decisions</li>
+                            <li>Mentor junior developers</li>
+                            <li>Collaborate with cross-functional teams</li>
+                        </ul>
+                    `,
+                    requirements: `
+                        <ul>
+                            <li>5+ years of professional software development experience</li>
+                            <li>Strong proficiency in React, Node.js, and TypeScript</li>
+                            <li>Experience with cloud platforms (AWS, Azure, or GCP)</li>
+                            <li>Excellent problem-solving and communication skills</li>
+                            <li>Bachelor's degree in Computer Science or equivalent</li>
+                        </ul>
+                    `,
+                    skills: 'React, Node.js, TypeScript, AWS, PostgreSQL, Docker, Kubernetes, GraphQL',
+                    commission_type: 'percentage',
+                    commission_value: 15,
+                    referral_bonus: 1000,
+                    views: 234,
+                    applications_count: 28,
+                    employer_email: 'jobs@techcorp.com',
+                    linkedin_url: 'https://linkedin.com/company/techcorp',
+                    github_url: 'https://github.com/techcorp',
+                    portfolio_url: 'https://techcorp.com',
+                    days_until_expiry: 8
+                },
+                'simple': {
+                    title: 'Marketing Manager',
+                    employer_name: 'StartupCo Inc',
+                    account_type: 'employer',
+                    location: 'Remote',
+                    job_type: 'Full-time',
+                    experience_level: 'Mid Level',
+                    salary_min: 80000,
+                    salary_max: 110000,
+                    description: `
+                        <p>Join our growing startup as a Marketing Manager and help us scale our brand presence. You'll lead marketing initiatives and drive growth strategies.</p>
+                        <p><strong>What You'll Do:</strong></p>
+                        <ul>
+                            <li>Develop and execute marketing campaigns</li>
+                            <li>Manage social media presence</li>
+                            <li>Analyze marketing metrics and ROI</li>
+                            <li>Coordinate with sales team</li>
+                        </ul>
+                    `,
+                    requirements: `
+                        <ul>
+                            <li>3+ years of marketing experience</li>
+                            <li>Proven track record in digital marketing</li>
+                            <li>Experience with marketing automation tools</li>
+                            <li>Strong analytical and creative skills</li>
+                            <li>Excellent written and verbal communication</li>
+                        </ul>
+                    `,
+                    skills: 'Digital Marketing, SEO, Content Marketing, Google Analytics, Social Media, Email Marketing',
+                    commission_type: null,
+                    commission_value: null,
+                    referral_bonus: null,
+                    views: 156,
+                    applications_count: 42,
+                    employer_email: 'careers@startupco.com',
+                    linkedin_url: 'https://linkedin.com/company/startupco',
+                    portfolio_url: 'https://startupco.com',
+                    days_until_expiry: 2
+                }
+            };
+            
+            const job = jobData[type];
+            const expiryClass = job.days_until_expiry <= 3 ? 'expiry-urgent' : 'expiry-normal';
+            
+            const skillsHTML = job.skills.split(',').map(skill => 
+                `<span class="skill-tag">${skill.trim()}</span>`
+            ).join('');
+            
+            const salaryHTML = `$${job.salary_min.toLocaleString()} - $${job.salary_max.toLocaleString()}`;
+            
+            let commissionHTML = '';
+            if (job.commission_type && job.commission_value) {
+                const commissionText = job.commission_type === 'percentage' ? 
+                    `${job.commission_value}%` : `$${job.commission_value.toLocaleString()}`;
+                commissionHTML = `
+                    <div class="job-detail-section">
+                        <h3><i class="fas fa-percentage"></i> Commission</h3>
+                        <p><span class="commission-badge">${commissionText} commission</span> for successful placement</p>
+                        <p class="job-detail-content" style="margin-top: 10px;">Available for recruiting agencies on successful candidate placement.</p>
+                    </div>
+                `;
+            }
+            
+            let referralHTML = '';
+            if (job.referral_bonus && job.referral_bonus > 0) {
+                referralHTML = `
+                    <div class="job-detail-section">
+                        <h3><i class="fas fa-gift"></i> Referral Bonus</h3>
+                        <p><span class="referral-badge">$${job.referral_bonus.toLocaleString()} referral bonus</span></p>
+                        <p class="job-detail-content" style="margin-top: 10px;">Paid to job seekers who refer successful candidates (paid users only).</p>
+                    </div>
+                `;
+            }
+            
+            let socialLinks = '';
+            if (job.linkedin_url) socialLinks += `<a href="${job.linkedin_url}" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>`;
+            if (job.github_url) socialLinks += `<a href="${job.github_url}" target="_blank" class="social-link"><i class="fab fa-github"></i></a>`;
+            if (job.behance_url) socialLinks += `<a href="${job.behance_url}" target="_blank" class="social-link"><i class="fab fa-behance"></i></a>`;
+            if (job.portfolio_url) socialLinks += `<a href="${job.portfolio_url}" target="_blank" class="social-link"><i class="fas fa-globe"></i></a>`;
+            
+            const modalHTML = `
+                <div id="jobModal" class="job-modal">
+                    <div class="job-modal-content">
+                        <button class="modal-close" onclick="closeJobModal()">&times;</button>
+                        
+                        <div class="modal-header">
+                            <div>
+                                <h2>${job.title}</h2>
+                                <p class="modal-company" ondblclick="alert('Opening employer profile in new tab...')" title="Double-click to open profile in new tab">
+                                    <i class="fas fa-building"></i> ${job.employer_name}
+                                    ${job.account_type === 'agency' ? '<span class="badge agency-badge">Agency</span>' : ''}
+                                </p>
+                            </div>
+                            <button class="btn-view-profile" onclick="alert('Opening employer profile in new tab...')">
+                                <i class="fas fa-user"></i> View Complete Profile
+                            </button>
+                        </div>
+                        
+                        <div class="modal-meta">
+                            <span class="meta-item"><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+                            <span class="meta-item"><i class="fas fa-clock"></i> ${job.job_type}</span>
+                            <span class="meta-item"><i class="fas fa-layer-group"></i> ${job.experience_level}</span>
+                            <span class="meta-item job-expiry ${expiryClass}">
+                                <i class="fas fa-clock"></i> Expires in ${job.days_until_expiry} day${job.days_until_expiry !== 1 ? 's' : ''}
+                            </span>
+                        </div>
+                        
+                        <div class="modal-salary"><i class="fas fa-dollar-sign"></i> ${salaryHTML}</div>
+                        
+                        <div class="modal-body">
+                            <div class="job-detail-section">
+                                <h3><i class="fas fa-info-circle"></i> Job Description</h3>
+                                <div class="job-detail-content">${job.description}</div>
+                            </div>
+                            
+                            <div class="job-detail-section">
+                                <h3><i class="fas fa-tasks"></i> Requirements</h3>
+                                <div class="job-detail-content">${job.requirements}</div>
+                            </div>
+                            
+                            <div class="job-detail-section">
+                                <h3><i class="fas fa-code"></i> Required Skills</h3>
+                                <div class="job-skills">${skillsHTML}</div>
+                            </div>
+                            
+                            ${commissionHTML}
+                            ${referralHTML}
+                            
+                            <div class="job-detail-section">
+                                <h3><i class="fas fa-building"></i> About the Employer</h3>
+                                <p><strong>${job.employer_name}</strong> ${job.account_type === 'agency' ? '(Recruiting Agency)' : '(Direct Employer)'}</p>
+                                <p><i class="fas fa-envelope"></i> ${job.employer_email}</p>
+                                ${socialLinks ? `<div class="employer-social">${socialLinks}</div>` : ''}
+                            </div>
+                            
+                            <div class="job-detail-section">
+                                <h3><i class="fas fa-chart-line"></i> Job Statistics</h3>
+                                <div class="job-stats">
+                                    <span><i class="fas fa-eye"></i> ${job.views} views</span>
+                                    <span><i class="fas fa-users"></i> ${job.applications_count} applicants</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button class="btn-secondary" onclick="closeJobModal()">Close</button>
+                            <button class="btn-apply" onclick="alert('Application submitted!')">
+                                <i class="fas fa-paper-plane"></i> Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Remove existing modal if any
+            const existingModal = document.getElementById('jobModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Show modal with animation
+            setTimeout(() => {
+                document.getElementById('jobModal').classList.add('show');
+            }, 10);
+        }
+        
+        function closeJobModal() {
+            const modal = document.getElementById('jobModal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('jobModal');
+            if (modal && event.target === modal) {
+                closeJobModal();
+            }
+        });
+    </script>
+</body>
+</html>
