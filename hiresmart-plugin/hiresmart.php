@@ -28,6 +28,7 @@ require_once HIRESMART_PLUGIN_DIR . 'includes/class-hiresmart-subscription.php';
 require_once HIRESMART_PLUGIN_DIR . 'includes/class-hiresmart-payment.php';
 require_once HIRESMART_PLUGIN_DIR . 'includes/class-hiresmart-dashboard.php';
 require_once HIRESMART_PLUGIN_DIR . 'includes/class-hiresmart-ai-profiling.php';
+require_once HIRESMART_PLUGIN_DIR . 'includes/class-hiresmart-jobs.php';
 
 // Initialize the plugin
 function hiresmart_init() {
@@ -97,10 +98,58 @@ function hiresmart_activate() {
         KEY user_id (user_id)
     ) $charset_collate;";
     
+    // Jobs table
+    $table_jobs = $wpdb->prefix . 'hiresmart_jobs';
+    $sql_jobs = "CREATE TABLE IF NOT EXISTS $table_jobs (
+        id bigint(20) NOT NULL AUTO_INCREMENT,
+        employer_id bigint(20) NOT NULL,
+        title varchar(255) NOT NULL,
+        description longtext NOT NULL,
+        requirements longtext,
+        location varchar(255),
+        salary_min decimal(10,2),
+        salary_max decimal(10,2),
+        job_type varchar(50),
+        experience_level varchar(50),
+        skills longtext,
+        commission_type varchar(50),
+        commission_value decimal(10,2),
+        referral_bonus decimal(10,2),
+        status varchar(20) DEFAULT 'active',
+        coins_used int(11) DEFAULT 0,
+        views int(11) DEFAULT 0,
+        applications_count int(11) DEFAULT 0,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP,
+        updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        expires_at datetime,
+        PRIMARY KEY (id),
+        KEY employer_id (employer_id),
+        KEY status (status)
+    ) $charset_collate;";
+    
+    // Job applications table
+    $table_applications = $wpdb->prefix . 'hiresmart_applications';
+    $sql_applications = "CREATE TABLE IF NOT EXISTS $table_applications (
+        id bigint(20) NOT NULL AUTO_INCREMENT,
+        job_id bigint(20) NOT NULL,
+        candidate_id bigint(20) NOT NULL,
+        cover_letter longtext,
+        resume_url varchar(255),
+        status varchar(20) DEFAULT 'pending',
+        applied_at datetime DEFAULT CURRENT_TIMESTAMP,
+        updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        KEY job_id (job_id),
+        KEY candidate_id (candidate_id),
+        KEY status (status)
+    ) $charset_collate;";
+    
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql_profiles);
     dbDelta($sql_subscriptions);
     dbDelta($sql_payments);
+    dbDelta($sql_jobs);
+    dbDelta($sql_applications);
     
     // Create pages
     hiresmart_create_pages();
@@ -135,6 +184,22 @@ function hiresmart_create_pages() {
         'register' => array(
             'title' => 'Create Account',
             'content' => '[hiresmart_register]'
+        ),
+        'post-job' => array(
+            'title' => 'Post a Job',
+            'content' => '[hiresmart_post_job]'
+        ),
+        'jobs' => array(
+            'title' => 'Browse Jobs',
+            'content' => '[hiresmart_job_listings]'
+        ),
+        'candidates' => array(
+            'title' => 'Browse Candidates',
+            'content' => '[hiresmart_candidates]'
+        ),
+        'employers-agencies' => array(
+            'title' => 'Employers & Agencies',
+            'content' => '[hiresmart_employers_agencies]'
         )
     );
     

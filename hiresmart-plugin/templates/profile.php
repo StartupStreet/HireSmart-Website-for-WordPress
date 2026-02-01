@@ -105,7 +105,94 @@ jQuery(document).ready(function($) {
 });
 
 function openAIAssessment() {
-    // Open AI assessment modal
-    alert('AI Assessment will be opened in a modal');
+    // Create modal HTML
+    var modalHTML = `
+        <div id="ai-assessment-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+            <div style="background: white; padding: 40px; border-radius: 12px; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+                <h2 style="margin-top: 0;">AI Profile Assessment</h2>
+                <p>Answer these questions to calculate your IQ, EQ, and SQ scores.</p>
+                
+                <form id="ai-assessment-form">
+                    <div class="form-group">
+                        <label><strong>Logical Reasoning (1-10)</strong></label>
+                        <p style="font-size: 14px; color: #6b7280;">How would you rate your logical problem-solving abilities?</p>
+                        <input type="range" name="logical_reasoning" min="1" max="10" value="5" aria-label="Logical Reasoning Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <span>5</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><strong>Problem Solving (1-10)</strong></label>
+                        <p style="font-size: 14px; color: #6b7280;">How effective are you at finding solutions to complex problems?</p>
+                        <input type="range" name="problem_solving" min="1" max="10" value="5" aria-label="Problem Solving Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <span>5</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><strong>Emotional Awareness (1-10)</strong></label>
+                        <p style="font-size: 14px; color: #6b7280;">How well do you understand and manage your own emotions?</p>
+                        <input type="range" name="emotional_awareness" min="1" max="10" value="5" aria-label="Emotional Awareness Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <span>5</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><strong>Empathy (1-10)</strong></label>
+                        <p style="font-size: 14px; color: #6b7280;">How well do you understand and relate to others' feelings?</p>
+                        <input type="range" name="empathy" min="1" max="10" value="5" aria-label="Empathy Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <span>5</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><strong>Communication Skills (1-10)</strong></label>
+                        <p style="font-size: 14px; color: #6b7280;">How effective are you at communicating with others?</p>
+                        <input type="range" name="communication" min="1" max="10" value="5" aria-label="Communication Skills Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <span>5</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><strong>Teamwork Ability (1-10)</strong></label>
+                        <p style="font-size: 14px; color: #6b7280;">How well do you work in team environments?</p>
+                        <input type="range" name="teamwork" min="1" max="10" value="5" aria-label="Teamwork Ability Score" oninput="this.nextElementSibling.textContent = this.value" style="width: 100%;">
+                        <span>5</span>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button type="submit" class="btn-primary" style="flex: 1;">Submit Assessment</button>
+                        <button type="button" class="btn-secondary" onclick="closeAIAssessment()" style="flex: 1;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    $('body').append(modalHTML);
+    
+    $('#ai-assessment-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        var formData = $(this).serialize();
+        formData += '&action=hiresmart_ai_assessment&nonce=' + hiresmart_ajax.nonce;
+        
+        $.ajax({
+            url: hiresmart_ajax.ajax_url,
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    alert('Assessment Complete!\n\nIQ Score: ' + response.scores.iq + 
+                          '\nEQ Score: ' + response.scores.eq + 
+                          '\nSQ Score: ' + response.scores.sq +
+                          '\n\nYour scores have been saved to your profile.');
+                    closeAIAssessment();
+                    location.reload();
+                } else {
+                    alert(response.message || 'Error submitting assessment');
+                }
+            }
+        });
+    });
+}
+
+function closeAIAssessment() {
+    $('#ai-assessment-modal').remove();
 }
 </script>

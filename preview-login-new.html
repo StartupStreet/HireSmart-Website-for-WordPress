@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign In - HireSmart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="hiresmart-plugin/assets/css/hiresmart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            padding: 40px 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .form-options label {
+            display: flex;
+            align-items: center;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .form-options input[type="checkbox"] {
+            margin-right: 6px;
+        }
+        
+        .form-options a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-button:hover {
+            background-color: #1e40af;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .social-login {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .social-button:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+        
+        .social-button i {
+            font-size: 18px;
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .signup-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <div class="header-content">
+            <a href="preview.html" class="logo">
+                Hire<span>Smart</span>
+            </a>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="preview.html#features">Features</a></li>
+                    <li><a href="preview.html#pricing">Pricing</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="preview-login-new.html" class="btn-secondary">Sign In</a>
+                <a href="preview-register-new.html" class="cta-button">Get Started</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1><i class="fas fa-sign-in-alt"></i> Welcome Back</h1>
+            <p>Sign in to your HireSmart account</p>
+        </div>
+        
+        <form id="hiresmart-login-form" method="post" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="form-options">
+                <label>
+                    <input type="checkbox" name="remember" value="1">
+                    Remember me
+                </label>
+                <a href="#"><i class="fas fa-question-circle"></i> Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="login-button">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+            
+            <div class="divider">
+                <span>OR</span>
+            </div>
+            
+            <div class="social-login">
+                <button type="button" class="social-button" onclick="handleSocialLogin('Google')">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
+                <button type="button" class="social-button" onclick="handleSocialLogin('LinkedIn')">
+                    <i class="fab fa-linkedin"></i> Continue with LinkedIn
+                </button>
+                <button type="button" class="social-button" onclick="handleSocialLogin('GitHub')">
+                    <i class="fab fa-github"></i> Continue with GitHub
+                </button>
+            </div>
+        </form>
+        
+        <div class="signup-link">
+            Don't have an account? <a href="preview-register-new.html"><i class="fas fa-user-plus"></i> Create Account</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    console.log('Login data:', data);
+    
+    alert(`Login successful!\n\nEmail: ${data.email}\n\nRedirecting to dashboard...`);
+    
+    window.location.href = 'preview-dashboard.html';
+    
+    return false;
+}
+
+function handleSocialLogin(provider) {
+    alert(`Initiating ${provider} OAuth login...\n\nIn production, this would:\n1. Open ${provider} OAuth popup\n2. Authenticate user\n3. Redirect to dashboard`);
+    
+    setTimeout(() => {
+        window.location.href = 'preview-dashboard.html';
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
