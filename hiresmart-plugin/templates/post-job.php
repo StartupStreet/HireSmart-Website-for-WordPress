@@ -106,7 +106,8 @@ $profile = $user_manager->get_profile(get_current_user_id());
                     <i class="fas fa-calendar-alt"></i>
                     <div>
                         <strong>Posting Duration</strong>
-                        <p>Your job will be active for 30 days</p>
+                        <p>Your job will be active for 14 days (2 weeks)</p>
+                        <small>Renewable every 2 weeks</small>
                     </div>
                 </div>
                 

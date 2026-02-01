@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
 
 $jobs_manager = new HireSmart_Jobs();
 $candidates = $jobs_manager->get_all_candidates();
+$is_logged_in = is_user_logged_in();
+$show_limit = !$is_logged_in ? 5 : count($candidates);
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -32,8 +34,11 @@ $candidates = $jobs_manager->get_all_candidates();
     
     <div class="candidates-grid">
         <?php if (!empty($candidates)): ?>
-            <?php foreach ($candidates as $candidate): ?>
-                <div class="candidate-card">
+            <?php foreach ($candidates as $index => $candidate): 
+                $is_blurred = !$is_logged_in && $index >= $show_limit;
+                $card_class = $is_blurred ? 'candidate-card blurred-card' : 'candidate-card';
+            ?>
+                <div class="<?php echo $card_class; ?>">
                     <div class="candidate-avatar">
                         <?php 
                         $initials = '';
@@ -54,6 +59,10 @@ $candidates = $jobs_manager->get_all_candidates();
                         
                         <?php if ($candidate->iq_score || $candidate->eq_score || $candidate->sq_score): ?>
                             <div class="candidate-scores">
+                                <div class="scores-header">
+                                    <i class="fas fa-chart-line"></i> AI-Analyzed Scores
+                                </div>
+                                
                                 <?php if ($candidate->iq_score): ?>
                                     <div class="score-badge iq">
                                         <i class="fas fa-brain"></i>
@@ -74,8 +83,85 @@ $candidates = $jobs_manager->get_all_candidates();
                                         <span>SQ: <?php echo $candidate->sq_score; ?></span>
                                     </div>
                                 <?php endif; ?>
+                                
+                                <div class="score-note">
+                                    <i class="fas fa-info-circle"></i>
+                                    Scores based on resume analysis & profile integrations
+                                </div>
                             </div>
                         <?php endif; ?>
+                        
+                        <div class="profile-sync-status">
+                            <div class="sync-header">
+                                <i class="fas fa-link"></i> Profile Integrations
+                            </div>
+                        
+                        <div class="profile-sync-status">
+                            <div class="sync-header">
+                                <i class="fas fa-link"></i> Profile Integrations
+                            </div>
+                            
+                            <div class="sync-items">
+                                <?php if ($candidate->linkedin_url): ?>
+                                    <div class="sync-item connected">
+                                        <i class="fab fa-linkedin"></i>
+                                        <span>LinkedIn</span>
+                                        <span class="sync-badge">✓ Connected</span>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="sync-item not-connected">
+                                        <i class="fab fa-linkedin"></i>
+                                        <span>LinkedIn</span>
+                                        <span class="sync-badge">Not Connected</span>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($candidate->github_url): ?>
+                                    <div class="sync-item connected">
+                                        <i class="fab fa-github"></i>
+                                        <span>GitHub</span>
+                                        <span class="sync-badge">✓ Connected</span>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="sync-item not-connected">
+                                        <i class="fab fa-github"></i>
+                                        <span>GitHub</span>
+                                        <span class="sync-badge">Not Connected</span>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($candidate->behance_url): ?>
+                                    <div class="sync-item connected">
+                                        <i class="fab fa-behance"></i>
+                                        <span>Behance</span>
+                                        <span class="sync-badge">✓ Connected</span>
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <?php if ($candidate->portfolio_url): ?>
+                                    <div class="sync-item connected">
+                                        <i class="fas fa-briefcase"></i>
+                                        <span>Portfolio</span>
+                                        <span class="sync-badge">✓ Connected</span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <?php 
+                            $connected_count = 0;
+                            $connected_count += $candidate->linkedin_url ? 1 : 0;
+                            $connected_count += $candidate->github_url ? 1 : 0;
+                            $connected_count += $candidate->behance_url ? 1 : 0;
+                            $connected_count += $candidate->portfolio_url ? 1 : 0;
+                            $sync_percentage = ($connected_count / 4) * 100;
+                            ?>
+                            <div class="sync-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: <?php echo $sync_percentage; ?>%"></div>
+                                </div>
+                                <span class="progress-text"><?php echo round($sync_percentage); ?>% Profile Sync Complete</span>
+                            </div>
+                        </div>
                         
                         <div class="candidate-links">
                             <?php if ($candidate->linkedin_url): ?>
@@ -110,6 +196,24 @@ $candidates = $jobs_manager->get_all_candidates();
                     </div>
                 </div>
             <?php endforeach; ?>
+            
+            <?php if (!$is_logged_in && count($candidates) > 5): ?>
+                <div class="access-gate">
+                    <div class="gate-content">
+                        <i class="fas fa-lock"></i>
+                        <h3>Want to see more candidates?</h3>
+                        <p>Login or subscribe to view all <?php echo count($candidates); ?> talented job seekers</p>
+                        <div class="gate-actions">
+                            <a href="<?php echo wp_login_url(); ?>" class="btn-login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                            <a href="<?php echo site_url('/register'); ?>" class="btn-signup">
+                                <i class="fas fa-user-plus"></i> Sign Up Free
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php else: ?>
             <div class="no-candidates">
                 <i class="fas fa-users"></i>
@@ -218,9 +322,175 @@ $candidates = $jobs_manager->get_all_candidates();
 
 .candidate-scores {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 8px;
     margin-bottom: 16px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.scores-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.candidate-scores .score-badge {
+    justify-content: flex-start;
+}
+
+.score-note {
+    font-size: 11px;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.profile-sync-status {
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.sync-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.sync-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.sync-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.sync-item.connected {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.sync-item.not-connected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.sync-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.sync-progress {
+    margin-top: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    transition: width 0.3s;
+}
+
+.progress-text {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.blurred-card {
+    filter: blur(5px);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.access-gate {
+    background: white;
+    border-radius: 12px;
+    padding: 60px 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    grid-column: 1 / -1;
+    margin-top: -50px;
+    position: relative;
+    z-index: 10;
+}
+
+.gate-content i {
+    font-size: 48px;
+    color: #2563eb;
+    margin-bottom: 20px;
+}
+
+.gate-content h3 {
+    font-size: 28px;
+    color: #1f2937;
+    margin-bottom: 12px;
+}
+
+.gate-content p {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.gate-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-login,
+.btn-signup {
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-login {
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.btn-login:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-signup {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-signup:hover {
+    background: #1e40af;
 }
 
 .score-badge {

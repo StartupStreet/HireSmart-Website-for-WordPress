@@ -26,8 +26,8 @@ class HireSmart_Jobs {
             return array('success' => false, 'message' => 'Only employers and agencies can post jobs');
         }
         
-        // Calculate expiration (30 days from now)
-        $expires_at = date('Y-m-d H:i:s', strtotime('+30 days'));
+        // Calculate expiration (14 days / 2 weeks from now)
+        $expires_at = date('Y-m-d H:i:s', strtotime('+14 days'));
         
         $insert_data = array(
             'employer_id' => $data['employer_id'],
@@ -244,6 +244,47 @@ class HireSmart_Jobs {
         return $wpdb->get_results(
             $wpdb->prepare($query, $args['limit'], $args['offset'])
         );
+    }
+    
+    /**
+     * Renew a job posting (extends by 14 days)
+     */
+    public function renew_job($job_id, $employer_id) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'hiresmart_jobs';
+        
+        // Verify ownership
+        $job = $wpdb->get_row(
+            $wpdb->prepare("SELECT * FROM $table WHERE id = %d AND employer_id = %d", $job_id, $employer_id)
+        );
+        
+        if (!$job) {
+            return array('success' => false, 'message' => 'Job not found or you do not have permission');
+        }
+        
+        // Extend expiration by 14 days from current expiry or now (whichever is later)
+        $current_expiry = strtotime($job->expires_at);
+        $now = time();
+        $base_time = max($current_expiry, $now);
+        $new_expiry = date('Y-m-d H:i:s', strtotime('+14 days', $base_time));
+        
+        $result = $wpdb->update(
+            $table,
+            array('expires_at' => $new_expiry, 'status' => 'active'),
+            array('id' => $job_id),
+            array('%s', '%s'),
+            array('%d')
+        );
+        
+        if ($result !== false) {
+            return array(
+                'success' => true, 
+                'message' => 'Job renewed successfully for 14 more days!',
+                'new_expiry' => $new_expiry
+            );
+        }
+        
+        return array('success' => false, 'message' => 'Failed to renew job');
     }
     
     /**

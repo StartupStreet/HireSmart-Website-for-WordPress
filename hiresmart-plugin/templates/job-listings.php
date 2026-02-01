@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
 
 $jobs_manager = new HireSmart_Jobs();
 $jobs = $jobs_manager->get_all_jobs();
+$is_logged_in = is_user_logged_in();
+$show_limit = !$is_logged_in ? 5 : count($jobs);
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -59,8 +61,11 @@ $jobs = $jobs_manager->get_all_jobs();
     
     <div class="jobs-grid">
         <?php if (!empty($jobs)): ?>
-            <?php foreach ($jobs as $job): ?>
-                <div class="job-card" data-job-id="<?php echo $job->id; ?>">
+            <?php foreach ($jobs as $index => $job): 
+                $is_blurred = !$is_logged_in && $index >= $show_limit;
+                $card_class = $is_blurred ? 'job-card blurred-card' : 'job-card';
+            ?>
+                <div class="<?php echo $card_class; ?>" data-job-id="<?php echo $job->id; ?>">
                     <div class="job-header">
                         <div class="job-info">
                             <h3><?php echo esc_html($job->title); ?></h3>
@@ -144,11 +149,40 @@ $jobs = $jobs_manager->get_all_jobs();
                         </div>
                     </div>
                     
-                    <div class="job-posted">
-                        Posted <?php echo human_time_diff(strtotime($job->created_at), current_time('timestamp')); ?> ago
+                    <div class="job-footer-meta">
+                        <div class="job-posted">
+                            Posted <?php echo human_time_diff(strtotime($job->created_at), current_time('timestamp')); ?> ago
+                        </div>
+                        
+                        <?php 
+                        $days_until_expiry = ceil((strtotime($job->expires_at) - time()) / 86400);
+                        $expiry_class = $days_until_expiry <= 3 ? 'expiry-urgent' : 'expiry-normal';
+                        ?>
+                        <div class="job-expiry <?php echo $expiry_class; ?>">
+                            <i class="fas fa-clock"></i>
+                            Expires in <?php echo $days_until_expiry; ?> day<?php echo $days_until_expiry != 1 ? 's' : ''; ?>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
+            
+            <?php if (!$is_logged_in && count($jobs) > 5): ?>
+                <div class="access-gate">
+                    <div class="gate-content">
+                        <i class="fas fa-lock"></i>
+                        <h3>Want to see more jobs?</h3>
+                        <p>Login or subscribe to view all <?php echo count($jobs); ?> available job openings</p>
+                        <div class="gate-actions">
+                            <a href="<?php echo wp_login_url(); ?>" class="btn-login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                            <a href="<?php echo site_url('/register'); ?>" class="btn-signup">
+                                <i class="fas fa-user-plus"></i> Sign Up Free
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php else: ?>
             <div class="no-jobs">
                 <i class="fas fa-briefcase"></i>
@@ -383,7 +417,112 @@ $jobs = $jobs_manager->get_all_jobs();
 .job-posted {
     font-size: 12px;
     color: #9ca3af;
+}
+
+.job-footer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 12px;
+}
+
+.job-expiry {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.job-expiry.expiry-normal {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.job-expiry.expiry-urgent {
+    background: #fee2e2;
+    color: #dc2626;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.blurred-card {
+    filter: blur(5px);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.access-gate {
+    background: white;
+    border-radius: 12px;
+    padding: 60px 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-top: -50px;
+    position: relative;
+    z-index: 10;
+}
+
+.gate-content i {
+    font-size: 48px;
+    color: #2563eb;
+    margin-bottom: 20px;
+}
+
+.gate-content h3 {
+    font-size: 28px;
+    color: #1f2937;
+    margin-bottom: 12px;
+}
+
+.gate-content p {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.gate-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-login,
+.btn-signup {
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-login {
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.btn-login:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-signup {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-signup:hover {
+    background: #1e40af;
 }
 
 .btn-primary {

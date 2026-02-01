@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
 
 $jobs_manager = new HireSmart_Jobs();
 $employers_agencies = $jobs_manager->get_employers_agencies();
+$is_logged_in = is_user_logged_in();
+$show_limit = !$is_logged_in ? 5 : count($employers_agencies);
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -44,8 +46,11 @@ $employers_agencies = $jobs_manager->get_employers_agencies();
     
     <div class="directory-grid">
         <?php if (!empty($employers_agencies)): ?>
-            <?php foreach ($employers_agencies as $entity): ?>
-                <div class="entity-card" data-type="<?php echo $entity->account_type; ?>">
+            <?php foreach ($employers_agencies as $index => $entity): 
+                $is_blurred = !$is_logged_in && $index >= $show_limit;
+                $card_class = $is_blurred ? 'entity-card blurred-card' : 'entity-card';
+            ?>
+                <div class="<?php echo $card_class; ?>" data-type="<?php echo $entity->account_type; ?>">
                     <div class="entity-header">
                         <div class="entity-avatar">
                             <?php 
@@ -116,6 +121,24 @@ $employers_agencies = $jobs_manager->get_employers_agencies();
                     </div>
                 </div>
             <?php endforeach; ?>
+            
+            <?php if (!$is_logged_in && count($employers_agencies) > 5): ?>
+                <div class="access-gate">
+                    <div class="gate-content">
+                        <i class="fas fa-lock"></i>
+                        <h3>Want to see more employers & agencies?</h3>
+                        <p>Login or subscribe to view all <?php echo count($employers_agencies); ?> companies</p>
+                        <div class="gate-actions">
+                            <a href="<?php echo wp_login_url(); ?>" class="btn-login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                            <a href="<?php echo site_url('/register'); ?>" class="btn-signup">
+                                <i class="fas fa-user-plus"></i> Sign Up Free
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php else: ?>
             <div class="no-entities">
                 <i class="fas fa-building"></i>
@@ -354,6 +377,80 @@ $employers_agencies = $jobs_manager->get_employers_agencies();
     font-size: 24px;
     color: #1f2937;
     margin-bottom: 10px;
+}
+
+.blurred-card {
+    filter: blur(5px);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.access-gate {
+    background: white;
+    border-radius: 12px;
+    padding: 60px 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    grid-column: 1 / -1;
+    margin-top: -50px;
+    position: relative;
+    z-index: 10;
+}
+
+.gate-content i {
+    font-size: 48px;
+    color: #2563eb;
+    margin-bottom: 20px;
+}
+
+.gate-content h3 {
+    font-size: 28px;
+    color: #1f2937;
+    margin-bottom: 12px;
+}
+
+.gate-content p {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.gate-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-login,
+.btn-signup {
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-login {
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.btn-login:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-signup {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-signup:hover {
+    background: #1e40af;
 }
 
 @media (max-width: 768px) {
