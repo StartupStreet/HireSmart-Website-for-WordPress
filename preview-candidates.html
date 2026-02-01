@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Browse Candidates - HireSmart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f9fafb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .hiresmart-candidates-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .candidates-header { margin-bottom: 40px; }
+        .candidates-header h1 { font-size: 32px; color: #1f2937; margin-bottom: 10px; }
+        .candidates-header .subtitle { font-size: 16px; color: #6b7280; }
+        .candidates-filters { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .search-box { position: relative; }
+        .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #6b7280; }
+        .search-box input { width: 100%; padding: 12px 12px 12px 45px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        .candidates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
+        .candidate-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; text-align: center; }
+        .candidate-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .candidate-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto 20px; }
+        .candidate-info h3 { font-size: 20px; color: #1f2937; margin-bottom: 8px; }
+        .candidate-email { color: #6b7280; font-size: 14px; margin-bottom: 16px; }
+        .candidate-scores { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .score-badge { padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .score-badge.iq { background: #dbeafe; color: #1e40af; }
+        .score-badge.eq { background: #fce7f3; color: #be185d; }
+        .score-badge.sq { background: #d1fae5; color: #065f46; }
+        .candidate-links { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .profile-link { padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; transition: all 0.3s; }
+        .profile-link.linkedin { background: #0077b5; color: white; }
+        .profile-link.github { background: #333; color: white; }
+        .profile-link.portfolio { background: #8b5cf6; color: white; }
+        .profile-link:hover { transform: scale(1.05); }
+        .candidate-meta { padding: 12px 0; border-top: 1px solid #e5e7eb; margin-bottom: 16px; }
+        .meta-item { font-size: 13px; color: #6b7280; }
+        .btn-contact { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .btn-contact:hover { background: #1e40af; }
+    </style>
+</head>
+<body>
+
+<header class="site-header" style="background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px 0; margin-bottom: 20px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="preview.html" style="font-size: 28px; font-weight: bold; color: #2563eb; text-decoration: none;">
+                Hire<span style="color: #1e40af;">Smart</span>
+            </a>
+            <div style="display: flex; gap: 15px;">
+                <a href="preview-post-job.html" style="background: white; color: #2563eb; padding: 12px 24px; border: 2px solid #2563eb; border-radius: 6px; text-decoration: none; font-weight: 600;">Post a Job</a>
+                <a href="preview-job-listings.html" style="background: white; color: #2563eb; padding: 12px 24px; border: 2px solid #2563eb; border-radius: 6px; text-decoration: none; font-weight: 600;">Jobs</a>
+                <a href="preview-employers.html" style="background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">Directory</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="hiresmart-candidates-container">
+    <div class="candidates-header">
+        <h1><i class="fas fa-users"></i> Browse Candidates</h1>
+        <p class="subtitle">Find the perfect talent for your team</p>
+    </div>
+    
+    <div class="candidates-filters">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search candidates by name or skills...">
+        </div>
+    </div>
+    
+    <div class="candidates-grid">
+        <!-- Candidate 1 -->
+        <div class="candidate-card">
+            <div class="candidate-avatar">JS</div>
+            <div class="candidate-info">
+                <h3>John Smith</h3>
+                <p class="candidate-email">
+                    <i class="fas fa-envelope"></i> john.smith@email.com
+                </p>
+                
+                <div class="candidate-scores">
+                    <div class="score-badge iq">
+                        <i class="fas fa-brain"></i> <span>IQ: 142</span>
+                    </div>
+                    <div class="score-badge eq">
+                        <i class="fas fa-heart"></i> <span>EQ: 87</span>
+                    </div>
+                    <div class="score-badge sq">
+                        <i class="fas fa-users"></i> <span>SQ: 92</span>
+                    </div>
+                </div>
+                
+                <div class="candidate-links">
+                    <a href="#" class="profile-link linkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="#" class="profile-link github">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="#" class="profile-link portfolio">
+                        <i class="fas fa-briefcase"></i> Portfolio
+                    </a>
+                </div>
+                
+                <div class="candidate-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar-alt"></i> Joined 3 months ago
+                    </span>
+                </div>
+                
+                <button class="btn-contact" onclick="alert('Contact John Smith?\n\nIn production, this would open your email client.')">
+                    <i class="fas fa-envelope"></i> Contact Candidate
+                </button>
+            </div>
+        </div>
+
+        <!-- Candidate 2 -->
+        <div class="candidate-card">
+            <div class="candidate-avatar" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">SM</div>
+            <div class="candidate-info">
+                <h3>Sarah Miller</h3>
+                <p class="candidate-email">
+                    <i class="fas fa-envelope"></i> sarah.m@email.com
+                </p>
+                
+                <div class="candidate-scores">
+                    <div class="score-badge iq">
+                        <i class="fas fa-brain"></i> <span>IQ: 135</span>
+                    </div>
+                    <div class="score-badge eq">
+                        <i class="fas fa-heart"></i> <span>EQ: 95</span>
+                    </div>
+                    <div class="score-badge sq">
+                        <i class="fas fa-users"></i> <span>SQ: 88</span>
+                    </div>
+                </div>
+                
+                <div class="candidate-links">
+                    <a href="#" class="profile-link linkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="#" class="profile-link portfolio">
+                        <i class="fas fa-briefcase"></i> Portfolio
+                    </a>
+                </div>
+                
+                <div class="candidate-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar-alt"></i> Joined 1 month ago
+                    </span>
+                </div>
+                
+                <button class="btn-contact">
+                    <i class="fas fa-envelope"></i> Contact Candidate
+                </button>
+            </div>
+        </div>
+
+        <!-- Candidate 3 -->
+        <div class="candidate-card">
+            <div class="candidate-avatar" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">DW</div>
+            <div class="candidate-info">
+                <h3>David Wilson</h3>
+                <p class="candidate-email">
+                    <i class="fas fa-envelope"></i> d.wilson@email.com
+                </p>
+                
+                <div class="candidate-scores">
+                    <div class="score-badge iq">
+                        <i class="fas fa-brain"></i> <span>IQ: 128</span>
+                    </div>
+                    <div class="score-badge eq">
+                        <i class="fas fa-heart"></i> <span>EQ: 82</span>
+                    </div>
+                    <div class="score-badge sq">
+                        <i class="fas fa-users"></i> <span>SQ: 90</span>
+                    </div>
+                </div>
+                
+                <div class="candidate-links">
+                    <a href="#" class="profile-link linkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="#" class="profile-link github">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                
+                <div class="candidate-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-calendar-alt"></i> Joined 2 weeks ago
+                    </span>
+                </div>
+                
+                <button class="btn-contact">
+                    <i class="fas fa-envelope"></i> Contact Candidate
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
