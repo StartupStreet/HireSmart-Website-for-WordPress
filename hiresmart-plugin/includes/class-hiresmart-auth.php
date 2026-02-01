@@ -70,9 +70,9 @@ class HireSmart_Auth {
         wp_set_auth_cookie($user_id);
         
         // Determine redirect URL
-        $redirect_url = site_url('/dashboard');
+        $redirect_url = site_url('/' . HireSmart_Core::PAGE_DASHBOARD);
         if ($data['subscription_tier'] !== 'free') {
-            $redirect_url = site_url('/billing?payment_required=1');
+            $redirect_url = site_url('/' . HireSmart_Core::PAGE_BILLING . '?payment_required=1');
         }
         
         return array(
@@ -110,7 +110,7 @@ class HireSmart_Auth {
         return array(
             'success' => true,
             'message' => 'Login successful',
-            'redirect_url' => site_url('/dashboard')
+            'redirect_url' => site_url('/' . HireSmart_Core::PAGE_DASHBOARD)
         );
     }
     
@@ -149,7 +149,7 @@ class HireSmart_Auth {
                 'success' => true,
                 'needs_setup' => true,
                 'user_id' => $user_id,
-                'redirect_url' => site_url('/register?social_setup=1&user_id=' . $user_id)
+                'redirect_url' => site_url('/' . HireSmart_Core::PAGE_REGISTER . '?social_setup=1&user_id=' . $user_id)
             );
         } else {
             // Login existing user
@@ -158,7 +158,7 @@ class HireSmart_Auth {
             
             return array(
                 'success' => true,
-                'redirect_url' => site_url('/dashboard')
+                'redirect_url' => site_url('/' . HireSmart_Core::PAGE_DASHBOARD)
             );
         }
     }
