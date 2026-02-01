@@ -25,18 +25,18 @@
                     <li><a href="<?php echo home_url(); ?>#pricing">Pricing</a></li>
                     <?php if (is_user_logged_in()): ?>
                         <li><a href="<?php echo site_url('/dashboard'); ?>">Dashboard</a></li>
-                        <li><a href="<?php echo site_url('/profile'); ?>">Profile</a></li>
-                    <?php else: ?>
-                        <li><a href="<?php echo site_url('/login'); ?>">Sign In</a></li>
                     <?php endif; ?>
                 </ul>
             </nav>
             
-            <?php if (is_user_logged_in()): ?>
-                <a href="<?php echo wp_logout_url(home_url()); ?>" class="cta-button">Logout</a>
-            <?php else: ?>
-                <a href="<?php echo site_url('/register'); ?>" class="cta-button">Get Started</a>
-            <?php endif; ?>
+            <div class="header-actions">
+                <?php if (is_user_logged_in()): ?>
+                    <a href="<?php echo wp_logout_url(home_url()); ?>" class="btn-secondary">Logout</a>
+                <?php else: ?>
+                    <a href="<?php echo site_url('/login'); ?>" class="btn-secondary">Sign In</a>
+                    <a href="<?php echo site_url('/register'); ?>" class="cta-button">Get Started</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </header>
