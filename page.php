@@ -27,16 +27,4 @@ get_header(); ?>
     ?>
 </div>
 
-<style>
-.page-wrapper {
-    min-height: calc(100vh - 200px);
-    padding: 40px 0;
-}
-.page-content-wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-</style>
-
 <?php get_footer(); ?>

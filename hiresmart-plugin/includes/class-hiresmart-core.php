@@ -7,6 +7,14 @@
 
 class HireSmart_Core {
     
+    // Page slug constants
+    const PAGE_DASHBOARD = 'dashboard';
+    const PAGE_LOGIN = 'login';
+    const PAGE_REGISTER = 'register';
+    const PAGE_PROFILE = 'profile';
+    const PAGE_BILLING = 'billing';
+    const PAGE_INTEGRATIONS = 'integrations';
+    
     public function __construct() {
         // Constructor
     }
@@ -66,8 +74,8 @@ class HireSmart_Core {
     public function handle_redirects() {
         // Check if user is logged in and trying to access login or register pages
         if (is_user_logged_in()) {
-            if (is_page('login') || is_page('register')) {
-                wp_redirect(site_url('/dashboard'));
+            if (is_page(self::PAGE_LOGIN) || is_page(self::PAGE_REGISTER)) {
+                wp_redirect(site_url('/' . self::PAGE_DASHBOARD));
                 exit;
             }
         }
@@ -75,7 +83,7 @@ class HireSmart_Core {
     
     public function render_dashboard() {
         if (!is_user_logged_in()) {
-            return '<p>Please <a href="' . site_url('/login') . '">login</a> to access your dashboard.</p>';
+            return '<p>Please <a href="' . site_url('/' . self::PAGE_LOGIN) . '">login</a> to access your dashboard.</p>';
         }
         
         ob_start();
@@ -85,7 +93,7 @@ class HireSmart_Core {
     
     public function render_profile() {
         if (!is_user_logged_in()) {
-            return '<p>Please <a href="' . site_url('/login') . '">login</a> to access your profile.</p>';
+            return '<p>Please <a href="' . site_url('/' . self::PAGE_LOGIN) . '">login</a> to access your profile.</p>';
         }
         
         ob_start();
@@ -95,7 +103,7 @@ class HireSmart_Core {
     
     public function render_billing() {
         if (!is_user_logged_in()) {
-            return '<p>Please <a href="' . site_url('/login') . '">login</a> to access billing.</p>';
+            return '<p>Please <a href="' . site_url('/' . self::PAGE_LOGIN) . '">login</a> to access billing.</p>';
         }
         
         ob_start();
@@ -105,7 +113,7 @@ class HireSmart_Core {
     
     public function render_integrations() {
         if (!is_user_logged_in()) {
-            return '<p>Please <a href="' . site_url('/login') . '">login</a> to access integrations.</p>';
+            return '<p>Please <a href="' . site_url('/' . self::PAGE_LOGIN) . '">login</a> to access integrations.</p>';
         }
         
         ob_start();
@@ -173,11 +181,11 @@ class HireSmart_Core {
     
     public function add_menu_items($items, $args) {
         if (is_user_logged_in()) {
-            $items .= '<li><a href="' . site_url('/dashboard') . '">Dashboard</a></li>';
+            $items .= '<li><a href="' . site_url('/' . self::PAGE_DASHBOARD) . '">Dashboard</a></li>';
             $items .= '<li><a href="' . wp_logout_url(home_url()) . '">Logout</a></li>';
         } else {
-            $items .= '<li><a href="' . site_url('/login') . '">Login</a></li>';
-            $items .= '<li><a href="' . site_url('/register') . '">Sign Up</a></li>';
+            $items .= '<li><a href="' . site_url('/' . self::PAGE_LOGIN) . '">Login</a></li>';
+            $items .= '<li><a href="' . site_url('/' . self::PAGE_REGISTER) . '">Sign Up</a></li>';
         }
         return $items;
     }
@@ -185,14 +193,14 @@ class HireSmart_Core {
     // New render methods for job-related pages
     public function render_post_job() {
         if (!is_user_logged_in()) {
-            return '<p>Please <a href="' . site_url('/login') . '">login</a> to post a job.</p>';
+            return '<p>Please <a href="' . site_url('/' . self::PAGE_LOGIN) . '">login</a> to post a job.</p>';
         }
         
         $user_manager = new HireSmart_User();
         $profile = $user_manager->get_profile(get_current_user_id());
         
         if (!$profile || !in_array($profile->account_type, ['employer', 'agency'])) {
-            return '<p>Only employers and agencies can post jobs. <a href="' . site_url('/register') . '">Upgrade your account</a>.</p>';
+            return '<p>Only employers and agencies can post jobs. <a href="' . site_url('/' . self::PAGE_REGISTER) . '">Upgrade your account</a>.</p>';
         }
         
         ob_start();
@@ -208,7 +216,7 @@ class HireSmart_Core {
     
     public function render_candidates() {
         if (!is_user_logged_in()) {
-            return '<p>Please <a href="' . site_url('/login') . '">login</a> to view candidates.</p>';
+            return '<p>Please <a href="' . site_url('/' . self::PAGE_LOGIN) . '">login</a> to view candidates.</p>';
         }
         
         $user_manager = new HireSmart_User();

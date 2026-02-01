@@ -593,3 +593,17 @@ body {
 .animate-on-scroll {
     animation: fadeInUp 0.8s ease-out;
 }
+
+/* ========================
+   Page Template Styles
+   ======================== */
+.page-wrapper {
+    min-height: calc(100vh - 200px);
+    padding: 40px 0;
+}
+
+.page-content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
