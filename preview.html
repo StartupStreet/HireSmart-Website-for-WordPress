@@ -251,55 +251,174 @@
             Choose the plan that fits your needs. No hidden fees, cancel anytime.
         </p>
         
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>Job Seeker</h3>
-                <div class="price">Free<span></span></div>
-                <ul>
-                    <li>Unlimited job applications</li>
-                    <li>AI-powered job recommendations</li>
-                    <li>Resume builder and optimization</li>
-                    <li>Application tracking</li>
-                    <li>Email notifications</li>
-                    <li>Basic analytics</li>
-                </ul>
-                <a href="#" class="btn">Get Started</a>
+        <!-- Pricing Tabs -->
+        <div style="display: flex; justify-content: center; gap: 20px; margin: 40px 0;">
+            <button onclick="showPricingTab('job_seeker')" id="tab-job_seeker" class="pricing-tab active" style="padding: 12px 30px; background: #2563eb; color: white; border: 2px solid #2563eb; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                Job Seeker
+            </button>
+            <button onclick="showPricingTab('employer')" id="tab-employer" class="pricing-tab" style="padding: 12px 30px; background: white; color: #2563eb; border: 2px solid #2563eb; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                Employer
+            </button>
+            <button onclick="showPricingTab('agency')" id="tab-agency" class="pricing-tab" style="padding: 12px 30px; background: white; color: #2563eb; border: 2px solid #2563eb; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+                Agency
+            </button>
+        </div>
+        
+        <!-- Job Seeker Pricing -->
+        <div id="pricing-job_seeker" class="pricing-content">
+            <div class="pricing-grid" style="max-width: 400px; margin: 0 auto;">
+                <div class="pricing-card featured">
+                    <span class="featured-badge">Always Free</span>
+                    <h3>Job Seeker</h3>
+                    <div class="price">$0<span>/forever</span></div>
+                    <ul>
+                        <li>Unlimited job applications</li>
+                        <li>AI-powered job recommendations</li>
+                        <li>Resume builder and optimization</li>
+                        <li>Application tracking</li>
+                        <li>Email notifications</li>
+                        <li>Profile showcase</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Get Started Free</a>
+                </div>
             </div>
-            
-            <div class="pricing-card featured">
-                <span class="featured-badge">Most Popular</span>
-                <h3>Employer Pro</h3>
-                <div class="price">$299<span>/month</span></div>
-                <ul>
-                    <li>Up to 10 active job postings</li>
-                    <li>AI candidate screening & ranking</li>
-                    <li>Advanced ATS features</li>
-                    <li>Team collaboration tools</li>
-                    <li>Custom branded career page</li>
-                    <li>Priority support</li>
-                    <li>Advanced analytics dashboard</li>
-                </ul>
-                <a href="#" class="btn">Start Free Trial</a>
+        </div>
+        
+        <!-- Employer Pricing -->
+        <div id="pricing-employer" class="pricing-content" style="display: none;">
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic</h3>
+                    <div class="price">$9<span>/month</span></div>
+                    <div style="color: #f59e0b; font-weight: 600; margin: 10px 0;">
+                        <i style="font-style: normal;">🪙</i> 25 AI Coins/month
+                    </div>
+                    <ul>
+                        <li><strong>1 job posting</strong></li>
+                        <li><strong>1 seat</strong></li>
+                        <li>1 month monitoring</li>
+                        <li>Basic ATS features</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <span class="featured-badge">Most Popular</span>
+                    <h3>Startup</h3>
+                    <div class="price">$49<span>/month</span></div>
+                    <div style="color: #f59e0b; font-weight: 600; margin: 10px 0;">
+                        <i style="font-style: normal;">🪙</i> 100 AI Coins/month
+                    </div>
+                    <ul>
+                        <li><strong>5 job postings</strong></li>
+                        <li><strong>1 seat</strong></li>
+                        <li>Advanced ATS features</li>
+                        <li>Priority support</li>
+                        <li>Analytics dashboard</li>
+                        <li>Auto-renew or one-time</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$99<span>/month</span></div>
+                    <div style="color: #f59e0b; font-weight: 600; margin: 10px 0;">
+                        <i style="font-style: normal;">🪙</i> 500 AI Coins/month
+                    </div>
+                    <ul>
+                        <li><strong>25 job postings</strong></li>
+                        <li><strong>3 seats</strong></li>
+                        <li>All Startup features</li>
+                        <li>Custom branding</li>
+                        <li>API access</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Contact Sales</a>
+                </div>
             </div>
-            
-            <div class="pricing-card">
-                <h3>Agency Enterprise</h3>
-                <div class="price">$999<span>/month</span></div>
-                <ul>
-                    <li>Unlimited job postings</li>
-                    <li>Multi-client management</li>
-                    <li>Advanced talent pool management</li>
-                    <li>White-label options</li>
-                    <li>Commission tracking</li>
-                    <li>Dedicated account manager</li>
-                    <li>Custom integrations</li>
-                    <li>API access</li>
-                </ul>
-                <a href="#" class="btn">Contact Sales</a>
+        </div>
+        
+        <!-- Agency Pricing -->
+        <div id="pricing-agency" class="pricing-content" style="display: none;">
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic</h3>
+                    <div class="price">$49<span>/month</span></div>
+                    <div style="color: #f59e0b; font-weight: 600; margin: 10px 0;">
+                        <i style="font-style: normal;">🪙</i> 100 AI Coins/month
+                    </div>
+                    <ul>
+                        <li><strong>5 job postings</strong></li>
+                        <li><strong>5 seats (minimum)</strong></li>
+                        <li>Multi-client management</li>
+                        <li>Basic ATS features</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <span class="featured-badge">Best Value</span>
+                    <h3>Startup</h3>
+                    <div class="price">$99<span>/month</span></div>
+                    <div style="color: #f59e0b; font-weight: 600; margin: 10px 0;">
+                        <i style="font-style: normal;">🪙</i> 300 AI Coins/month
+                    </div>
+                    <ul>
+                        <li><strong>15 job postings</strong></li>
+                        <li><strong>10 seats</strong></li>
+                        <li>Advanced talent pool</li>
+                        <li>Commission tracking</li>
+                        <li>Priority support</li>
+                        <li>Analytics dashboard</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$199<span>/month</span></div>
+                    <div style="color: #f59e0b; font-weight: 600; margin: 10px 0;">
+                        <i style="font-style: normal;">🪙</i> 1000 AI Coins/month
+                    </div>
+                    <ul>
+                        <li><strong>Unlimited job postings</strong></li>
+                        <li><strong>25 seats</strong></li>
+                        <li>White-label options</li>
+                        <li>API access</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <a href="preview-register-new.html" class="btn">Contact Sales</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+function showPricingTab(type) {
+    // Hide all pricing content
+    document.querySelectorAll('.pricing-content').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Show selected content
+    document.getElementById('pricing-' + type).style.display = 'block';
+    
+    // Update tab styles
+    document.querySelectorAll('.pricing-tab').forEach(tab => {
+        tab.style.background = 'white';
+        tab.style.color = '#2563eb';
+    });
+    
+    const activeTab = document.getElementById('tab-' + type);
+    activeTab.style.background = '#2563eb';
+    activeTab.style.color = 'white';
+}
+</script>
 
 <!-- CTA Section -->
 <section class="cta-section">
