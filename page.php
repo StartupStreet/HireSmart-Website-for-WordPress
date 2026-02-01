@@ -11,18 +11,12 @@
 
 get_header(); ?>
 
-<div class="page-content">
+<div class="page-wrapper">
     <?php
     while (have_posts()) : the_post();
         ?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-            <?php if (!is_front_page()): ?>
-                <header class="page-header">
-                    <h1 class="page-title"><?php the_title(); ?></h1>
-                </header>
-            <?php endif; ?>
-            
-            <div class="page-entry-content">
+            <div class="page-content-wrapper">
                 <?php
                 the_content();
                 ?>
@@ -32,5 +26,17 @@ get_header(); ?>
     endwhile;
     ?>
 </div>
+
+<style>
+.page-wrapper {
+    min-height: calc(100vh - 200px);
+    padding: 40px 0;
+}
+.page-content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+</style>
 
 <?php get_footer(); ?>
