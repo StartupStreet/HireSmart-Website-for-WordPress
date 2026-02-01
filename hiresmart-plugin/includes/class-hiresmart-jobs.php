@@ -40,6 +40,9 @@ class HireSmart_Jobs {
             'job_type' => sanitize_text_field($data['job_type']),
             'experience_level' => sanitize_text_field($data['experience_level']),
             'skills' => sanitize_text_field($data['skills']),
+            'commission_type' => isset($data['commission_type']) ? sanitize_text_field($data['commission_type']) : null,
+            'commission_value' => isset($data['commission_value']) ? floatval($data['commission_value']) : null,
+            'referral_bonus' => isset($data['referral_bonus']) ? floatval($data['referral_bonus']) : null,
             'status' => 'active',
             'coins_used' => intval($data['coins_used']) ?: 1,
             'expires_at' => $expires_at
@@ -115,7 +118,9 @@ class HireSmart_Jobs {
         
         $job = $wpdb->get_row(
             $wpdb->prepare(
-                "SELECT j.*, u.display_name as employer_name, p.account_type 
+                "SELECT j.*, u.display_name as employer_name, u.user_email as employer_email,
+                        p.account_type, p.subscription_tier, p.linkedin_url, p.github_url,
+                        p.behance_url, p.portfolio_url
                  FROM $table j
                  LEFT JOIN {$wpdb->users} u ON j.employer_id = u.ID
                  LEFT JOIN {$wpdb->prefix}hiresmart_profiles p ON j.employer_id = p.user_id
@@ -132,6 +137,29 @@ class HireSmart_Jobs {
         }
         
         return $job;
+    }
+    
+    /**
+     * Get employer/agency profile by user ID
+     */
+    public function get_employer_profile($user_id) {
+        global $wpdb;
+        $profiles_table = $wpdb->prefix . 'hiresmart_profiles';
+        $jobs_table = $wpdb->prefix . 'hiresmart_jobs';
+        
+        $profile = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT p.*, u.display_name, u.user_email, u.user_registered,
+                        (SELECT COUNT(*) FROM $jobs_table WHERE employer_id = p.user_id AND status = 'active') as active_jobs,
+                        (SELECT COUNT(*) FROM $jobs_table WHERE employer_id = p.user_id) as total_jobs
+                 FROM $profiles_table p
+                 LEFT JOIN {$wpdb->users} u ON p.user_id = u.ID
+                 WHERE p.user_id = %d",
+                $user_id
+            )
+        );
+        
+        return $profile;
     }
     
     /**

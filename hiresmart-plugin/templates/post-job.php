@@ -98,6 +98,46 @@ $profile = $user_manager->get_profile(get_current_user_id());
             </div>
         </div>
         
+        <?php 
+        // Check if user has paid subscription
+        $subscription = null;
+        if (is_user_logged_in()) {
+            $subscription_manager = new HireSmart_Subscription();
+            $subscription = $subscription_manager->get_user_subscription(get_current_user_id());
+        }
+        $is_paid_user = $subscription && in_array($subscription->subscription_tier, ['startup', 'enterprise']);
+        ?>
+        
+        <?php if ($is_paid_user): ?>
+        <div class="form-section">
+            <h2><i class="fas fa-hand-holding-usd"></i> Commission & Referral (Paid Users Only)</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="commission_type"><i class="fas fa-percentage"></i> Commission Type</label>
+                    <select id="commission_type" name="commission_type">
+                        <option value="">No Commission</option>
+                        <option value="percentage">Percentage</option>
+                        <option value="fixed">Fixed Amount</option>
+                    </select>
+                    <small>Commission for recruiting agencies on successful placement</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="commission_value"><i class="fas fa-dollar-sign"></i> Commission Value</label>
+                    <input type="number" id="commission_value" name="commission_value" placeholder="0" step="0.01" min="0">
+                    <small>Amount or percentage (e.g., 10 for 10% or 5000 for $5,000)</small>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="referral_bonus"><i class="fas fa-gift"></i> Referral Bonus</label>
+                <input type="number" id="referral_bonus" name="referral_bonus" placeholder="0" step="1" min="0">
+                <small>Bonus for job seekers who refer successful candidates (in $)</small>
+            </div>
+        </div>
+        <?php endif; ?>
+        
         <div class="form-section">
             <h2><i class="fas fa-coins"></i> Posting Details</h2>
             
@@ -351,7 +391,10 @@ jQuery(document).ready(function($) {
                 salary_max: $('input[name="salary_max"]').val(),
                 job_type: $('select[name="job_type"]').val(),
                 experience_level: $('select[name="experience_level"]').val(),
-                skills: $('input[name="skills"]').val()
+                skills: $('input[name="skills"]').val(),
+                commission_type: $('select[name="commission_type"]').val(),
+                commission_value: $('input[name="commission_value"]').val(),
+                referral_bonus: $('input[name="referral_bonus"]').val()
             },
             success: function(response) {
                 if (response.success) {

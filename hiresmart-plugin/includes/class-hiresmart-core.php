@@ -36,6 +36,10 @@ class HireSmart_Core {
         add_action('wp_ajax_hiresmart_ai_assessment', array($this, 'ajax_ai_assessment'));
         add_action('wp_ajax_hiresmart_post_job', array($this, 'ajax_post_job'));
         add_action('wp_ajax_hiresmart_apply_job', array($this, 'ajax_apply_job'));
+        add_action('wp_ajax_hiresmart_get_job_details', array($this, 'ajax_get_job_details'));
+        add_action('wp_ajax_nopriv_hiresmart_get_job_details', array($this, 'ajax_get_job_details'));
+        add_action('wp_ajax_hiresmart_get_employer_profile', array($this, 'ajax_get_employer_profile'));
+        add_action('wp_ajax_nopriv_hiresmart_get_employer_profile', array($this, 'ajax_get_employer_profile'));
         
         // Add menu items
         add_action('wp_nav_menu_items', array($this, 'add_menu_items'), 10, 2);
@@ -240,6 +244,9 @@ class HireSmart_Core {
             'job_type' => $_POST['job_type'],
             'experience_level' => $_POST['experience_level'],
             'skills' => $_POST['skills'],
+            'commission_type' => isset($_POST['commission_type']) ? $_POST['commission_type'] : null,
+            'commission_value' => isset($_POST['commission_value']) ? $_POST['commission_value'] : null,
+            'referral_bonus' => isset($_POST['referral_bonus']) ? $_POST['referral_bonus'] : null,
             'coins_used' => 1
         );
         
@@ -274,6 +281,42 @@ class HireSmart_Core {
             wp_send_json_success($result);
         } else {
             wp_send_json_error($result);
+        }
+    }
+    
+    // AJAX handler for getting job details
+    public function ajax_get_job_details() {
+        check_ajax_referer('hiresmart_nonce', 'nonce');
+        
+        if (empty($_POST['job_id'])) {
+            wp_send_json_error(array('message' => 'Job ID is required'));
+        }
+        
+        $jobs_manager = new HireSmart_Jobs();
+        $job = $jobs_manager->get_job(intval($_POST['job_id']));
+        
+        if ($job) {
+            wp_send_json_success(array('job' => $job));
+        } else {
+            wp_send_json_error(array('message' => 'Job not found'));
+        }
+    }
+    
+    // AJAX handler for getting employer profile
+    public function ajax_get_employer_profile() {
+        check_ajax_referer('hiresmart_nonce', 'nonce');
+        
+        if (empty($_POST['employer_id'])) {
+            wp_send_json_error(array('message' => 'Employer ID is required'));
+        }
+        
+        $jobs_manager = new HireSmart_Jobs();
+        $profile = $jobs_manager->get_employer_profile(intval($_POST['employer_id']));
+        
+        if ($profile) {
+            wp_send_json_success(array('profile' => $profile));
+        } else {
+            wp_send_json_error(array('message' => 'Profile not found'));
         }
     }
 }
