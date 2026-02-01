@@ -29,14 +29,11 @@
                 </ul>
             </nav>
             
-            <div class="header-actions">
-                <?php if (is_user_logged_in()): ?>
-                    <a href="<?php echo wp_logout_url(home_url()); ?>" class="btn-secondary">Logout</a>
-                <?php else: ?>
-                    <a href="<?php echo site_url('/login'); ?>" class="btn-secondary">Sign In</a>
-                    <a href="<?php echo site_url('/register'); ?>" class="cta-button">Get Started</a>
-                <?php endif; ?>
-            </div>
+            <?php if (is_user_logged_in()): ?>
+                <a href="<?php echo wp_logout_url(home_url()); ?>" class="cta-button">Logout</a>
+            <?php else: ?>
+                <a href="<?php echo site_url('/register'); ?>" class="cta-button">Get Started</a>
+            <?php endif; ?>
         </div>
     </div>
 </header>
