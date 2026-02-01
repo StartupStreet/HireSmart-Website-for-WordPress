@@ -19,6 +19,10 @@ class HireSmart_Core {
         add_shortcode('hiresmart_integrations', array($this, 'render_integrations'));
         add_shortcode('hiresmart_login', array($this, 'render_login'));
         add_shortcode('hiresmart_register', array($this, 'render_register'));
+        add_shortcode('hiresmart_post_job', array($this, 'render_post_job'));
+        add_shortcode('hiresmart_job_listings', array($this, 'render_job_listings'));
+        add_shortcode('hiresmart_candidates', array($this, 'render_candidates'));
+        add_shortcode('hiresmart_employers_agencies', array($this, 'render_employers_agencies'));
         
         // Enqueue scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
@@ -30,6 +34,8 @@ class HireSmart_Core {
         add_action('wp_ajax_nopriv_hiresmart_login', array($this, 'ajax_login'));
         add_action('wp_ajax_hiresmart_update_profile', array($this, 'ajax_update_profile'));
         add_action('wp_ajax_hiresmart_ai_assessment', array($this, 'ajax_ai_assessment'));
+        add_action('wp_ajax_hiresmart_post_job', array($this, 'ajax_post_job'));
+        add_action('wp_ajax_hiresmart_apply_job', array($this, 'ajax_apply_job'));
         
         // Add menu items
         add_action('wp_nav_menu_items', array($this, 'add_menu_items'), 10, 2);
@@ -165,5 +171,109 @@ class HireSmart_Core {
             $items .= '<li><a href="' . site_url('/register') . '">Sign Up</a></li>';
         }
         return $items;
+    }
+    
+    // New render methods for job-related pages
+    public function render_post_job() {
+        if (!is_user_logged_in()) {
+            return '<p>Please <a href="' . site_url('/login') . '">login</a> to post a job.</p>';
+        }
+        
+        $user_manager = new HireSmart_User();
+        $profile = $user_manager->get_profile(get_current_user_id());
+        
+        if (!$profile || !in_array($profile->account_type, ['employer', 'agency'])) {
+            return '<p>Only employers and agencies can post jobs. <a href="' . site_url('/register') . '">Upgrade your account</a>.</p>';
+        }
+        
+        ob_start();
+        include HIRESMART_PLUGIN_DIR . 'templates/post-job.php';
+        return ob_get_clean();
+    }
+    
+    public function render_job_listings() {
+        ob_start();
+        include HIRESMART_PLUGIN_DIR . 'templates/job-listings.php';
+        return ob_get_clean();
+    }
+    
+    public function render_candidates() {
+        if (!is_user_logged_in()) {
+            return '<p>Please <a href="' . site_url('/login') . '">login</a> to view candidates.</p>';
+        }
+        
+        $user_manager = new HireSmart_User();
+        $profile = $user_manager->get_profile(get_current_user_id());
+        
+        if (!$profile || !in_array($profile->account_type, ['employer', 'agency'])) {
+            return '<p>Only employers and agencies can view the candidate database.</p>';
+        }
+        
+        ob_start();
+        include HIRESMART_PLUGIN_DIR . 'templates/candidates.php';
+        return ob_get_clean();
+    }
+    
+    public function render_employers_agencies() {
+        ob_start();
+        include HIRESMART_PLUGIN_DIR . 'templates/employers-agencies.php';
+        return ob_get_clean();
+    }
+    
+    // AJAX handler for posting jobs
+    public function ajax_post_job() {
+        check_ajax_referer('hiresmart_nonce', 'nonce');
+        
+        if (!is_user_logged_in()) {
+            wp_send_json_error(array('message' => 'You must be logged in'));
+        }
+        
+        $jobs_manager = new HireSmart_Jobs();
+        $data = array(
+            'employer_id' => get_current_user_id(),
+            'title' => $_POST['title'],
+            'description' => $_POST['description'],
+            'requirements' => $_POST['requirements'],
+            'location' => $_POST['location'],
+            'salary_min' => $_POST['salary_min'],
+            'salary_max' => $_POST['salary_max'],
+            'job_type' => $_POST['job_type'],
+            'experience_level' => $_POST['experience_level'],
+            'skills' => $_POST['skills'],
+            'coins_used' => 1
+        );
+        
+        $result = $jobs_manager->create_job($data);
+        
+        if ($result['success']) {
+            wp_send_json_success($result);
+        } else {
+            wp_send_json_error($result);
+        }
+    }
+    
+    // AJAX handler for applying to jobs
+    public function ajax_apply_job() {
+        check_ajax_referer('hiresmart_nonce', 'nonce');
+        
+        if (!is_user_logged_in()) {
+            wp_send_json_error(array('message' => 'You must be logged in'));
+        }
+        
+        $jobs_manager = new HireSmart_Jobs();
+        $data = array(
+            'job_id' => $_POST['job_id'],
+            'candidate_id' => get_current_user_id(),
+            'cover_letter' => $_POST['cover_letter'],
+            'resume_url' => $_POST['resume_url']
+        );
+        
+        $result = $jobs_manager->apply_for_job($data);
+        
+        if ($result['success']) {
+            wp_send_json_success($result);
+        } else {
+            wp_send_json_error($result);
+        }
     }
 }
